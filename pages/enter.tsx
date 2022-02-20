@@ -39,13 +39,14 @@ export default function Enter() {
           </div>
         </div>
         <form className="flex flex-col mt-8">
-          <label className="text-sm font-medium text-gray-700">
+          <label htmlFor="input" className="text-sm font-medium text-gray-700">
             {method === "email" ? "Email address" : null}
             {method === "phone" ? "Phone number" : null}
           </label>
           <div className="mt-1">
             {method === "email" ? (
               <input
+                id="input"
                 type="email"
                 required
                 className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
@@ -57,6 +58,7 @@ export default function Enter() {
                   +82
                 </span>
                 <input
+                  id="input"
                   type="number"
                   required
                   className="appearance-none w-full px-3 py-2 border rounded-l-none border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
@@ -64,7 +66,7 @@ export default function Enter() {
               </div>
             ) : null}
           </div>
-          <button className="mt-6  py-2 px-4 border-transparent border border-gray-300 text-gray-500 rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none">
+          <button className="mt-6  py-2 px-4 border-transparent border border-gray-300 text-primary rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none hover:bg-primary hover:text-white">
             {method === "email" ? "Get login link" : null}
             {method === "phone" ? "Get one-time password" : null}
           </button>
