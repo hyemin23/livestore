@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Button from "../components/common/Button";
 import Input from "../components/common/Input";
+import useMutation from "../hooks/useMutation";
 import { cls } from "../lib";
 
 interface EnterForm {
@@ -8,7 +10,9 @@ interface EnterForm {
   phone?: string;
 }
 export default function Login() {
+  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
   const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
+  const [submitting, setSubmitting] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
   const onEmailClick = () => {
     reset();
@@ -20,7 +24,17 @@ export default function Login() {
   };
 
   const onValid = (data: EnterForm) => {
-    console.log(data);
+    enter(data);
+    setSubmitting(true);
+    fetch("/api/users/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      setSubmitting(false);
+    });
   };
 
   return (
@@ -80,10 +94,13 @@ export default function Login() {
               />
             ) : null}
           </div>
-          <button className="mt-6  py-2 px-4 border-transparent border border-gray-300 text-primary rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none hover:bg-primary hover:text-white">
-            {method === "email" ? "Get login link" : null}
-            {method === "phone" ? "Get one-time password" : null}
-          </button>
+
+          {method === "email" ? (
+            <Button text={submitting ? "Loading" : "이메일 로그인"} />
+          ) : null}
+          {method === "phone" ? (
+            <Button text={submitting ? "Loading" : "핸드폰 번호로 로그인"} />
+          ) : null}
         </form>
         <div className="mt-6">
           <div className="relative">
