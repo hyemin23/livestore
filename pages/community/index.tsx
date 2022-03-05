@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import React from "react";
-import Layout from "../../components/layout";
+import Layout from "../@components/layout";
 
 // 인기 게시글은 상위 노출, 고정
 const Community: NextPage = () => {
