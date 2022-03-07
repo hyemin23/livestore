@@ -1,19 +1,58 @@
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
+import { logInAPI } from "apis/user";
+import { AxiosError } from "axios";
+import User from "interface/user";
+import { cls } from "libs";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Button from "../components/common/Button";
-import Input from "../components/common/Input";
-import useMutation from "../hooks/useMutation";
-import { cls } from "../lib";
+import { FieldErrors, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
 
 interface EnterForm {
-  email?: string;
+  email: string;
+  password: string;
   phone?: string;
 }
+
+interface LoginForm {
+  email: string;
+  password: string;
+  username: string;
+}
 export default function Login() {
-  const [enter, { loading, data, error }] = useMutation("/api/users/enter");
-  const { register, watch, handleSubmit, reset } = useForm<EnterForm>();
+  const queryClient = useQueryClient();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<EnterForm>();
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
+  const mutation = useMutation<
+    User,
+    AxiosError,
+    {
+      email: string;
+      password: string;
+    }
+  >("user", logInAPI, {
+    onMutate: () => {
+      setLoginLoading(true);
+    },
+    onError: (error) => {
+      alert(error.response?.data);
+    },
+    onSuccess: (user) => {
+      queryClient.setQueryData("user", user);
+    },
+    onSettled: () => {
+      setLoginLoading(false);
+    },
+  });
+
   const onEmailClick = () => {
     reset();
     setMethod("email");
@@ -24,19 +63,14 @@ export default function Login() {
   };
 
   const onValid = (data: EnterForm) => {
-    enter(data);
     setSubmitting(true);
-    fetch("/api/users/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(() => {
-      setSubmitting(false);
-    });
+
+    mutation.mutate(data);
   };
 
+  const onInvalid = (errors: FieldErrors) => {
+    console.log(errors);
+  };
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center text-primary">Zzic9</h3>
@@ -68,7 +102,10 @@ export default function Login() {
             </button>
           </div>
         </div>
-        <form className="flex flex-col mt-8" onSubmit={handleSubmit(onValid)}>
+        <form
+          className="flex flex-col mt-8"
+          onSubmit={handleSubmit(onValid, onInvalid)}
+        >
           <label
             htmlFor="input"
             className="text-sm font-medium text-gray-700"
