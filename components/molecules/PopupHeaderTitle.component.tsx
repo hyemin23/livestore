@@ -12,7 +12,7 @@ const PopupHeaderTitleComponent = ({
     <div className="flex">
       <div
         className="flex items-center justify-center cursor-pointer"
-        onClick={() => Invisible()}
+        onClick={Invisible}
       >
         <LeftArrowIcon />
       </div>

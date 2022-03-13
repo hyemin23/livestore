@@ -1,6 +1,6 @@
 import { cls } from "libs";
 import React from "react";
-import PopupHeaderTitleComponent from "../molecules/PopupHeaderTitle.component";
+import PopupHeaderTitleComponent from "../../molecules/PopupHeaderTitle.component";
 
 const TermPopupComponent = ({
   visible = false,
@@ -10,10 +10,9 @@ const TermPopupComponent = ({
 }: {
   visible: boolean;
   popupTitle: string;
-  Invisible: (config: boolean) => void;
+  Invisible: () => void;
   children: React.ReactNode;
 }) => {
-  console.log(visible);
   return (
     <div
       className={cls(

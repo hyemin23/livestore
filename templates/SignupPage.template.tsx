@@ -1,7 +1,9 @@
 import { SignupStep } from "@/components/constant/enum.constant";
 import { SignupTitleMessages } from "@/components/constant/message.constant";
+import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
 import TitleHeaderComponent from "@/components/molecules/TitleHeader.component";
-import TermConfirmStepComponent from "@/components/organs/TermConfirmStep.component";
+import BasicUserInfoComponent from "@/components/organs/signup/BasicUserInfo.component";
+import TermConfirmStepComponent from "@/components/organs/signup/TermConfirmStep.component";
 import { cls } from "libs";
 import React from "react";
 
@@ -24,10 +26,11 @@ const SignupPageTemplate = ({
 }: SignupTemplateProps) => {
   return (
     <div className="px-9">
+      {/* arrow prev header */}
       {step === 0 && <TitleHeaderComponent title="" />}
 
       {/* back button */}
-      <div className=" h-16 pt-4 mb-7">
+      <div className=" h-16 pt-10 mb-7">
         {step !== 0 && (
           <div
             className={cls(
@@ -35,20 +38,7 @@ const SignupPageTemplate = ({
             )}
           >
             <button onClick={onClickMinus}>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 19l-7-7 7-7"
-                ></path>
-              </svg>
+              <LeftArrowIcon />
             </button>
           </div>
         )}
@@ -71,12 +61,14 @@ const SignupPageTemplate = ({
         )}
 
         {/* 기본정보 입력 */}
-
+        {step === SignupStep.USER_INFO && (
+          <BasicUserInfoComponent onClickPlus={onClickPlus} />
+        )}
         {/* 이메일 인증 */}
       </div>
 
-      {/* bottom */}
-      {SignupTitleMessages[step].button && (
+      {/* footer */}
+      {step !== 1 && SignupTitleMessages[step].button && (
         <div className="px-2 pb-2 fixed bottom-0 right-0 left-0 w-full bg-white text-center">
           <button
             type="button"

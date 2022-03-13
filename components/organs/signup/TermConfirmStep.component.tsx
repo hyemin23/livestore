@@ -1,10 +1,10 @@
 import useVisibleHook from "@/hooks/useVisible.hook";
 import { cls } from "libs";
 import React, { useCallback, useEffect } from "react";
-import Privacy from "../atoms/terms/Privacy";
-import Require from "../atoms/terms/Require";
-import CheckIcon from "../icons/CheckIcon";
-import TermCheckButtonComponent from "../molecules/TermCheckButton.component";
+import Privacy from "../../atoms/terms/Privacy";
+import Require from "../../atoms/terms/Require";
+import CheckIcon from "../../icons/CheckIcon";
+import TermCheckButtonComponent from "../../molecules/TermCheckButton.component";
 import TermPopupComponent from "./TermPopup.component";
 
 const TermConfirmStepComponent = ({

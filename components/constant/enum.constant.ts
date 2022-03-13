@@ -1,7 +1,4 @@
 export enum SignupStep {
   TERM_CONFIRM,
-  PHONE_VALID,
   USER_INFO,
-  PROFILE_INPUT,
-  COMPLETE_SIGNUP,
 }

@@ -1,8 +1,8 @@
 export type TitleMessageType = {
   title: string;
   description: string;
-  button: string | boolean;
-  allowBack: boolean;
+  button?: string | boolean;
+  allowBack?: boolean;
 };
 export const SignupTitleMessages: TitleMessageType[] = [
   {
@@ -14,7 +14,6 @@ export const SignupTitleMessages: TitleMessageType[] = [
   {
     title: "회원가입을 완료해주세요!",
     description: "회원가입을 완료한 후 찍구를 사용해 보아요!",
-    button: "다음 단계로",
     allowBack: true,
   },
   {
