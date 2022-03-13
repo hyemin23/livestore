@@ -1,6 +1,7 @@
 function CheckIcon({ color }: { color: string }) {
   return (
     <svg
+      className="p-2"
       width="37"
       height="34"
       viewBox="0 0 37 34"
