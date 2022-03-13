@@ -11,7 +11,7 @@ interface SignupTemplateProps {
   onClickPlus: () => void;
   onClickMinus: () => void;
   setConfirm: (conf: boolean) => void;
-  isStepCompleted: object;
+  isStepCompleted: any;
 }
 
 const SignupPageTemplate = ({
@@ -64,12 +64,32 @@ const SignupPageTemplate = ({
         </div>
       </div>
 
-      {/*  */}
       <div>
+        {/* 약관동의 */}
         {step === SignupStep.TERM_CONFIRM && (
           <TermConfirmStepComponent confirm={confirm} setConfirm={setConfirm} />
         )}
+
+        {/* 기본정보 입력 */}
+
+        {/* 이메일 인증 */}
       </div>
+
+      {/* bottom */}
+      {SignupTitleMessages[step].button && (
+        <div className="px-2 pb-2 fixed bottom-0 right-0 left-0 w-full bg-white text-center">
+          <button
+            type="button"
+            className="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={!isStepCompleted[step]}
+            onClick={onClickPlus}
+          >
+            <span className="text-white text-lg">
+              {SignupTitleMessages[step].button}
+            </span>
+          </button>
+        </div>
+      )}
     </div>
   );
 };
