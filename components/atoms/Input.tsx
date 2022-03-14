@@ -7,6 +7,7 @@ interface InputProps {
   type: string;
   register: UseFormRegisterReturn;
   required: boolean;
+  placeholder?: string;
 }
 
 export default function Input({
@@ -16,6 +17,7 @@ export default function Input({
   register,
   type,
   required,
+  placeholder,
 }: InputProps) {
   return (
     <div>
@@ -25,9 +27,11 @@ export default function Input({
       >
         {label}
       </label>
+
       {kind === "text" ? (
         <div className="rounded-md relative flex  items-center shadow-sm">
           <input
+            placeholder={placeholder}
             id={name}
             required={required}
             {...register}
@@ -47,6 +51,7 @@ export default function Input({
             required={required}
             {...register}
             type={type}
+            placeholder={placeholder}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary
             "
           />
@@ -65,6 +70,7 @@ export default function Input({
             required={required}
             {...register}
             type={type}
+            placeholder={placeholder}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
           />
         </div>
