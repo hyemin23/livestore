@@ -3,6 +3,7 @@ import { SignupTitleMessages } from "@/components/constant/message.constant";
 import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
 import TitleHeaderComponent from "@/components/molecules/TitleHeader.component";
 import BasicUserInfoComponent from "@/components/organs/signup/BasicUserInfo.component";
+import ProfileInfoComponent from "@/components/organs/signup/ProfileInfo.component";
 import TermConfirmStepComponent from "@/components/organs/signup/TermConfirmStep.component";
 import { cls } from "libs";
 import React from "react";
@@ -64,7 +65,8 @@ const SignupPageTemplate = ({
         {step === SignupStep.USER_INFO && (
           <BasicUserInfoComponent onClickPlus={onClickPlus} />
         )}
-        {/* 이메일 인증 */}
+        {/* 추가정보 */}
+        {step === SignupStep.PROFILE && <ProfileInfoComponent />}
       </div>
 
       {/* footer */}

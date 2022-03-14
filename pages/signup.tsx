@@ -10,6 +10,7 @@ const SignUp = () => {
     () => ({
       [SignupStep.TERM_CONFIRM]: confirm,
       [SignupStep.USER_INFO]: true,
+      [SignupStep.PROFILE]: true,
     }),
     [confirm]
   );
