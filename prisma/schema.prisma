@@ -14,9 +14,10 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  phone     Int?     @unique
-  email     String?  @unique
-  name      String
+  email     String   @unique
+  nickname  String   @unique
+  password  String
+  phone     String   @unique
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
