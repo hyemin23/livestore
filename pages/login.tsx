@@ -6,7 +6,7 @@ import User from "interface/user";
 import { cls } from "libs";
 import { useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 
 interface EnterForm {
   email: string;
@@ -20,7 +20,6 @@ interface LoginForm {
   username: string;
 }
 export default function Login() {
-  const queryClient = useQueryClient();
   const {
     register,
     watch,
@@ -31,27 +30,27 @@ export default function Login() {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
-  const mutation = useMutation<
-    User,
-    AxiosError,
-    {
-      email: string;
-      password: string;
-    }
-  >("user", logInAPI, {
-    onMutate: () => {
-      setLoginLoading(true);
-    },
-    onError: (error) => {
-      alert(error.response?.data);
-    },
-    onSuccess: (user) => {
-      queryClient.setQueryData("user", user);
-    },
-    onSettled: () => {
-      setLoginLoading(false);
-    },
-  });
+  // const mutation = useMutation<
+  //   User,
+  //   AxiosError,
+  //   {
+  //     email: string;
+  //     password: string;
+  //   }
+  // >("user", logInAPI, {
+  //   onMutate: () => {
+  //     setLoginLoading(true);
+  //   },
+  //   onError: (error) => {
+  //     alert(error.response?.data);
+  //   },
+  //   onSuccess: (user) => {
+  //     // queryClient.setQueryData("user", user);
+  //   },
+  //   onSettled: () => {
+  //     setLoginLoading(false);
+  //   },
+  // });
 
   const onEmailClick = () => {
     reset();
@@ -65,7 +64,7 @@ export default function Login() {
   const onValid = (data: EnterForm) => {
     setSubmitting(true);
 
-    mutation.mutate(data);
+    // mutation.mutate(data);
   };
 
   const onInvalid = (errors: FieldErrors) => {

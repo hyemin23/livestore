@@ -8,7 +8,6 @@ interface basicProps {
 }
 interface JoinForm {
   email: string;
-  nickname: string;
   password: string;
   phone: string;
   passwordCheck: string;
@@ -56,34 +55,6 @@ const BasicUserInfoComponent = ({ onClickPlus }: basicProps) => {
           />
           {errors.email && errors.email.type === "required" && (
             <p className="text-red-500">필수항목입니다.</p>
-          )}
-        </div>
-        <div>
-          <Input
-            label="닉네임"
-            type="nickname"
-            name="nickname"
-            required
-            register={register("nickname", {
-              minLength: {
-                value: 2,
-                message: "2글자 이상 입력해주세요.",
-              },
-              maxLength: {
-                value: 7,
-                message: "7글자를 넘을 수 없습니다.",
-              },
-            })}
-            placeholder="닉네임을 입력해주세요."
-          />
-          {errors.nickname && errors.nickname.type === "required" && (
-            <p className="text-red-500">필수항목입니다.</p>
-          )}
-          {errors.nickname && errors.nickname.type === "minLength" && (
-            <p className="text-red-500">{errors.nickname.message}</p>
-          )}
-          {errors.nickname && errors.nickname.type === "maxLength" && (
-            <p className="text-red-500">{errors.nickname.message}</p>
           )}
         </div>
 

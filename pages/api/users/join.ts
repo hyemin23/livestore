@@ -7,8 +7,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   let user;
 
   if (email) {
-    console.log(email);
-
     user = await client.user.findUnique({
       where: {
         email,
@@ -19,10 +17,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       console.log("Did not find.. so will create");
       user = await client.user.create({
         data: {
-          nickname,
           email,
           password,
           phone,
+          nickname: nickname
+            ? nickname
+            : Math.random().toString(36).substring(2, 11),
         },
       });
 

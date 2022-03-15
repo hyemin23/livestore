@@ -8,7 +8,6 @@ export const registAPI = (data: {
   email: string;
   password: string;
   phone: string;
-  nickname: string;
 }) => {
   return axios.post("/api/users/join", data).then((res) => res.data);
 };
