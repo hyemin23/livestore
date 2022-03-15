@@ -1,4 +1,4 @@
-import AppTitleComponent from "@/components/molecules/AppTitle.components";
+import AppTitleComponent from "src/components/molecules/AppTitle.components";
 import Link from "next/link";
 import React from "react";
 

@@ -1,7 +1,7 @@
-import Input from "@/components/atoms/Input";
-import DefaultProfileIcon from "@/components/icons/DefaultProfileIcon";
-import SpinnerIcon from "@/components/icons/SpinnerIcon";
-import UploadComponent from "@/components/molecules/Upload.component";
+import Input from "src/components/atoms/Input";
+import DefaultProfileIcon from "src/components/icons/DefaultProfileIcon";
+import SpinnerIcon from "src/components/icons/SpinnerIcon";
+import UploadComponent from "src/components/molecules/Upload.component";
 import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 

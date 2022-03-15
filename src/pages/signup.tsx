@@ -1,6 +1,6 @@
-import { SignupStep } from "@/components/constant/enum.constant";
+import { SignupStep } from "src/components/constant/enum.constant";
 import React, { useCallback, useMemo, useState } from "react";
-import SignupPageTemplate from "templates/SignupPage.template";
+import SignupPageTemplate from "src/templates/SignupPage.template";
 
 const SignUp = () => {
   const [step, setStep] = useState<SignupStep>(SignupStep.TERM_CONFIRM);

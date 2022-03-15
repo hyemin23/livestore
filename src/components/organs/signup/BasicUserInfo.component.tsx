@@ -1,4 +1,4 @@
-import Input from "@/components/atoms/Input";
+import Input from "src/components/atoms/Input";
 import { registAPI } from "apis/user";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";

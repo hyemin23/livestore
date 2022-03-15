@@ -1,10 +1,10 @@
-import { SignupStep } from "@/components/constant/enum.constant";
-import { SignupTitleMessages } from "@/components/constant/message.constant";
-import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
-import TitleHeaderComponent from "@/components/molecules/TitleHeader.component";
-import BasicUserInfoComponent from "@/components/organs/signup/BasicUserInfo.component";
-import ProfileInfoComponent from "@/components/organs/signup/ProfileInfo.component";
-import TermConfirmStepComponent from "@/components/organs/signup/TermConfirmStep.component";
+import { SignupStep } from "src/components/constant/enum.constant";
+import { SignupTitleMessages } from "src/components/constant/message.constant";
+import LeftArrowIcon from "src/components/icons/LeftArrowIcon";
+import TitleHeaderComponent from "src/components/molecules/TitleHeader.component";
+import BasicUserInfoComponent from "src/components/organs/signup/BasicUserInfo.component";
+import ProfileInfoComponent from "src/components/organs/signup/ProfileInfo.component";
+import TermConfirmStepComponent from "src/components/organs/signup/TermConfirmStep.component";
 import { cls } from "libs";
 import React from "react";
 
