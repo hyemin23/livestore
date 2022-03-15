@@ -3,3 +3,7 @@ export enum SignupStep {
   USER_INFO,
   PROFILE,
 }
+
+export const FolderPathType = {
+  PROFILE: "profile",
+};

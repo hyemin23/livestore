@@ -1,4 +1,4 @@
-import Layout from "@/components/layout";
+import Layout from "src/components/layout";
 import { NextPage } from "next";
 import React from "react";
 

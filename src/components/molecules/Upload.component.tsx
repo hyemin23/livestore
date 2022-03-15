@@ -1,23 +1,30 @@
 import axios from "axios";
 import React, { useCallback } from "react";
+import { Resource } from "src/models/dto/api-response";
 import CameraIcon from "../icons/CameraIcon";
 
-const UploadComponent = ({
-  setLoading,
-}: {
+interface UploadProps {
   setLoading: (config: boolean) => void;
-}) => {
+  folder: string;
+  onUploadImage: (e: Resource[]) => void;
+}
+
+function UploadComponent({ setLoading, folder, onUploadImage }: UploadProps) {
   const onUploadFile = useCallback(
     async (e) => {
       setLoading(true);
 
       // 해당 유저 프로필 사진 저장
-      const uploaded = await Promise.all(
+      await Promise.all(
         Object.entries(e.target.files).map((file) =>
           axios
             .post("/users/profile", {
               file: file[1],
-              // path: folder,
+              path: folder,
+            })
+            .then((data: any) => {
+              console.log("profile upload data", data);
+              onUploadImage(data);
             })
             .catch((error) => {
               console.error(error.response.data);
@@ -26,7 +33,7 @@ const UploadComponent = ({
         )
       );
     },
-    [setLoading]
+    [setLoading, onUploadImage, folder]
   );
 
   return (
@@ -46,6 +53,6 @@ const UploadComponent = ({
       </label>
     </form>
   );
-};
+}
 
 export default UploadComponent;

@@ -1,45 +1,27 @@
-import Input from "src/components/atoms/Input";
-import DefaultProfileIcon from "src/components/icons/DefaultProfileIcon";
-import SpinnerIcon from "src/components/icons/SpinnerIcon";
-import UploadComponent from "src/components/molecules/Upload.component";
-import React, { useMemo, useState } from "react";
+import ProfileImageContainerComponent from "@/components/molecules/ProfileImageContainer.component";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import Input from "src/components/atoms/Input";
+import { Resource } from "src/models/dto/api-response";
 
 interface ProfileForm {
   nickname: string;
   avatar: string;
 }
-const ProfileInfoComponent = ({ imgSrc = "" }) => {
-  const [loading, setLoading] = useState(false);
+
+function ProfileInfoComponent() {
   const {
     register,
     formState: { errors },
   } = useForm<ProfileForm>();
 
-  const image = useMemo(() => {
-    if (imgSrc)
-      return <img className="h-[56px]" src={imgSrc} alt="프로필 이미지" />;
-
-    return <DefaultProfileIcon />;
-  }, [imgSrc, loading]);
+  const onUploadImage = useCallback((uploaded: Resource[]) => {}, []);
 
   return (
     <div>
       <div className="relative flex flex-col items-center justify-center">
-        {/* profile image */}
-        {loading ? (
-          <SpinnerIcon />
-        ) : (
-          <>
-            <div className="border-4 rounded-full flex items-center justify-center overflow-hidden">
-              {image}
-            </div>
-            <UploadComponent
-              // folder={FolderPathType.PROFILE}
-              setLoading={setLoading}
-            />
-          </>
-        )}
+        <ProfileImageContainerComponent onUploadImage={onUploadImage} />
+
         {/* nickname */}
         <div className="mt-10">
           <Input
@@ -72,6 +54,6 @@ const ProfileInfoComponent = ({ imgSrc = "" }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ProfileInfoComponent;

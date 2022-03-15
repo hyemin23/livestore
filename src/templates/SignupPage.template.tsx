@@ -6,7 +6,8 @@ import BasicUserInfoComponent from "src/components/organs/signup/BasicUserInfo.c
 import ProfileInfoComponent from "src/components/organs/signup/ProfileInfo.component";
 import TermConfirmStepComponent from "src/components/organs/signup/TermConfirmStep.component";
 import { cls } from "libs";
-import React from "react";
+import React, { useCallback } from "react";
+import { Resource } from "src/models/dto/api-response";
 
 interface SignupTemplateProps {
   step: SignupStep;

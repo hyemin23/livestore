@@ -1,5 +1,5 @@
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
+import Button from "src/components/atoms/Button";
+import Input from "src/components/atoms/Input";
 import { logInAPI } from "apis/user";
 import { AxiosError } from "axios";
 import User from "interface/user";
