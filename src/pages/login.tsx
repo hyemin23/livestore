@@ -1,12 +1,12 @@
-import Button from "src/components/atoms/Button";
-import Input from "src/components/atoms/Input";
 import { logInAPI } from "apis/user";
 import { AxiosError } from "axios";
-import User from "interface/user";
 import { cls } from "libs";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import Button from "src/components/atoms/Button";
+import Input from "src/components/atoms/Input";
+import User from "src/interface/user";
 
 interface EnterForm {
   email: string;
@@ -20,6 +20,7 @@ interface LoginForm {
   username: string;
 }
 export default function Login() {
+  const queryClient = useQueryClient();
   const {
     register,
     watch,
@@ -30,27 +31,29 @@ export default function Login() {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
-  // const mutation = useMutation<
-  //   User,
-  //   AxiosError,
-  //   {
-  //     email: string;
-  //     password: string;
-  //   }
-  // >("user", logInAPI, {
-  //   onMutate: () => {
-  //     setLoginLoading(true);
-  //   },
-  //   onError: (error) => {
-  //     alert(error.response?.data);
-  //   },
-  //   onSuccess: (user) => {
-  //     // queryClient.setQueryData("user", user);
-  //   },
-  //   onSettled: () => {
-  //     setLoginLoading(false);
-  //   },
-  // });
+  const mutation = useMutation<
+    User,
+    AxiosError,
+    {
+      email: string;
+      password: string;
+      phone?: string;
+    }
+  >("user", logInAPI, {
+    onMutate: () => {
+      setLoginLoading(true);
+    },
+    onError: (error) => {
+      alert(error.response?.data);
+    },
+    onSuccess: (user) => {
+      console.log("로그인 성공 : user");
+      queryClient.setQueryData("user", user);
+    },
+    onSettled: () => {
+      setLoginLoading(false);
+    },
+  });
 
   const onEmailClick = () => {
     reset();
@@ -61,15 +64,21 @@ export default function Login() {
     setMethod("phone");
   };
 
-  const onValid = (data: EnterForm) => {
-    setSubmitting(true);
+  // login
+  const onValid = useCallback(
+    (data: EnterForm) => {
+      setSubmitting(true);
 
-    // mutation.mutate(data);
-  };
+      mutation.mutate(data);
+    },
+    [submitting, loginLoading]
+  );
 
   const onInvalid = (errors: FieldErrors) => {
+    // password 일치하는지 검사
     console.log(errors);
   };
+
   return (
     <div className="mt-16 px-4">
       <h3 className="text-3xl font-bold text-center text-primary">Zzic9</h3>
@@ -102,13 +111,9 @@ export default function Login() {
           </div>
         </div>
         <form
-          className="flex flex-col mt-8"
+          className="flex flex-col mt-8 space-y-5"
           onSubmit={handleSubmit(onValid, onInvalid)}
         >
-          <label
-            htmlFor="input"
-            className="text-sm font-medium text-gray-700"
-          ></label>
           <div className="mt-1">
             {method === "email" ? (
               <Input
@@ -131,11 +136,28 @@ export default function Login() {
             ) : null}
           </div>
 
+          {/* password */}
+          <div>
+            <Input
+              name="password"
+              label="Password"
+              type="password"
+              required
+              register={register("password")}
+            />
+          </div>
+
           {method === "email" ? (
-            <Button text={submitting ? "Loading" : "이메일 로그인"} />
+            <Button
+              text={submitting ? "Loading" : "이메일 로그인"}
+              type="submit"
+            />
           ) : null}
           {method === "phone" ? (
-            <Button text={submitting ? "Loading" : "핸드폰 번호로 로그인"} />
+            <Button
+              text={submitting ? "Loading" : "핸드폰 번호로 로그인"}
+              type="submit"
+            />
           ) : null}
         </form>
         <div className="mt-6">

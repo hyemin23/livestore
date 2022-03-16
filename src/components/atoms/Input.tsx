@@ -1,6 +1,7 @@
+import React from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
   kind?: "text" | "phone" | "price";
@@ -10,15 +11,16 @@ interface InputProps {
   placeholder?: string;
 }
 
-export default function Input({
+const Input: React.FC<InputProps> = ({
   label,
   name,
   kind = "text",
   register,
   type,
   required,
-  placeholder,
-}: InputProps) {
+  placeholder = "",
+  ...rest
+}) => {
   return (
     <div>
       <label
@@ -34,8 +36,9 @@ export default function Input({
             placeholder={placeholder}
             id={name}
             required={required}
-            {...register}
             type={type}
+            {...register}
+            {...rest}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary
             "
           />
@@ -51,6 +54,7 @@ export default function Input({
             required={required}
             {...register}
             type={type}
+            {...rest}
             placeholder={placeholder}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary
             "
@@ -69,6 +73,7 @@ export default function Input({
             id={name}
             required={required}
             {...register}
+            {...rest}
             type={type}
             placeholder={placeholder}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
@@ -77,4 +82,6 @@ export default function Input({
       ) : null}
     </div>
   );
-}
+};
+
+export default React.memo(Input);

@@ -1,3 +1,4 @@
+import { cls } from "libs";
 import { SignupStep } from "src/components/constant/enum.constant";
 import { SignupTitleMessages } from "src/components/constant/message.constant";
 import LeftArrowIcon from "src/components/icons/LeftArrowIcon";
@@ -5,9 +6,6 @@ import TitleHeaderComponent from "src/components/molecules/TitleHeader.component
 import BasicUserInfoComponent from "src/components/organs/signup/BasicUserInfo.component";
 import ProfileInfoComponent from "src/components/organs/signup/ProfileInfo.component";
 import TermConfirmStepComponent from "src/components/organs/signup/TermConfirmStep.component";
-import { cls } from "libs";
-import React, { useCallback } from "react";
-import { Resource } from "src/models/dto/api-response";
 
 interface SignupTemplateProps {
   step: SignupStep;
@@ -71,7 +69,7 @@ const SignupPageTemplate = ({
       </div>
 
       {/* footer */}
-      {step !== 1 && SignupTitleMessages[step].button && (
+      {step !== 1 && step !== 2 && SignupTitleMessages[step].button && (
         <div className="px-2 pb-2 fixed bottom-0 right-0 left-0 w-full bg-white text-center">
           <button
             type="button"

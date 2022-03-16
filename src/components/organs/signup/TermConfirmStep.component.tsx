@@ -1,6 +1,6 @@
-import useVisibleHook from "@/hooks/useVisible.hook";
 import { cls } from "libs";
 import React, { useCallback, useEffect } from "react";
+import useVisibleHook from "src/hooks/useVisible.hook";
 import Privacy from "../../atoms/terms/Privacy";
 import Require from "../../atoms/terms/Require";
 import CheckIcon from "../../icons/CheckIcon";
