@@ -1,33 +1,48 @@
+import { ResponseType } from "@/types/axiosType";
+import client from "libs/server/client";
 import withHandler from "libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
+) {
   const { nickname, password, phone, email } = req.body;
-  const payload = phone ? { phone } : { email };
+  const user = phone ? { phone } : { email };
 
-  //   const user = await client.user.upsert({
-  //     where: {
-  //       ...payload,
-  //     },
-  //     create: {
-  //       ...(nickname
-  //         ? { nickname }
-  //         : { nickname: Math.random().toString(36).substring(2, 11) }),
-  //       password,
+  if (email) {
+    const existUser = await client.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
-  //       ...(email && {
-  //         email,
-  //       }),
-  //       ...(phone && {
-  //         phone,
-  //       }),
-  //     },
-  //     update: {},
-  //   });
+    // 유저가 존재하는 경우 로그인
+    if (!!existUser) {
+      // const token = await client.token.create({
+      //   data: {
+      //     payload,
+      //     user: {
+      //       create: {
+      //         email,
+      //         phone,
+      //         nickname: "Anonymous",
+      //         password: "1234",
+      //       },
+      //     },
+      //   },
+      // });
+    } else {
+      return res.status(400).json({
+        ok: false,
+        message: "아이디 비밀번호를 확인해주세요.",
+      });
+    }
+  }
 
-  return res.status(401).end("이미 존재하는 유저입니다.");
-
-  return res.status(200).end();
+  return res.status(200).json({
+    ok: true,
+  });
 }
 
 export default withHandler("POST", handler);
