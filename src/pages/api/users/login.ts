@@ -1,17 +1,9 @@
-import { ResponseType } from "@/types/axiosType";
+import { ResponseType } from "@/types/index";
 import bcrypt from "bcryptjs";
-import { withIronSessionApiRoute } from "iron-session/next";
 import client from "libs/server/client";
 import withHandler from "libs/server/withHandler";
+import { withApiSession } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
-
-declare module "iron-session" {
-  interface IronSessionData {
-    user?: {
-      id: number;
-    };
-  }
-}
 
 async function handler(
   req: NextApiRequest,
@@ -30,14 +22,22 @@ async function handler(
     else {
       const { password, id } = existUser;
 
-      req.session.user = {
-        id,
-      };
-      // session 저장
-      await req.session.save();
       const isPAsswordMatched = bcrypt.compareSync(inputPw, password);
 
+      if (!isPAsswordMatched) {
+        return res.status(401).json({
+          ok: false,
+          message: "아이디 혹은 비밀번호를 확인해주세요.",
+        });
+      }
+
       if (isPAsswordMatched) {
+        // session 저장
+        req.session.user = {
+          id,
+        };
+        await req.session.save();
+
         return res.status(200).json({
           ok: true,
         });
@@ -46,7 +46,4 @@ async function handler(
   }
 }
 
-export default withIronSessionApiRoute(withHandler("POST", handler), {
-  cookieName: "zzic9",
-  password: process.env.IRON_KEY!,
-});
+export default withApiSession(withHandler("POST", handler, true));

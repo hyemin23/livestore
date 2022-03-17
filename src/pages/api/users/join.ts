@@ -1,7 +1,8 @@
-import { ResponseType } from "@/types/axiosType";
+import { ResponseType } from "@/types/index";
 import bcrypt from "bcryptjs";
 import client from "libs/server/client";
 import withHandler from "libs/server/withHandler";
+import { withApiSession } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
 import { payload } from "./../../../../libs/index";
@@ -96,4 +97,10 @@ async function handler(
   });
 }
 
-export default withHandler("POST", handler);
+// private handler (login case)
+export default withApiSession(
+  withHandler({
+    method: "POST",
+    handlerFunction: handler,
+  })
+);

@@ -1,12 +1,12 @@
 import { logInAPI } from "apis/user";
 import { AxiosError } from "axios";
 import { cls } from "libs";
+import Router from "next/router";
 import { useCallback, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import Button from "src/components/atoms/Button";
 import Input from "src/components/atoms/Input";
-import User from "src/interface/user";
 
 interface EnterForm {
   email: string;
@@ -19,7 +19,7 @@ interface LoginForm {
   password: string;
   username: string;
 }
-const Login = () => {
+const Login: React.FC = () => {
   const queryClient = useQueryClient();
   const {
     register,
@@ -29,10 +29,9 @@ const Login = () => {
     formState: { errors },
   } = useForm<EnterForm>();
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [loginLoading, setLoginLoading] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
   const mutation = useMutation<
-    User,
+    { ok: boolean },
     AxiosError,
     {
       email: string;
@@ -40,19 +39,17 @@ const Login = () => {
       phone?: string;
     }
   >("user", logInAPI, {
-    onMutate: () => {
-      setLoginLoading(true);
-    },
+    onMutate: () => {},
     onError: (error) => {
       const { message } = error.response?.data;
       alert(message);
     },
-    onSuccess: (user) => {
-      console.log("로그인 성공 : user");
-      queryClient.setQueryData("user", user);
+    onSuccess: ({ ok }: { ok: boolean }) => {
+      if (ok) Router.push("/");
+
+      // queryClient.setQueryData("user", user);
     },
     onSettled: () => {
-      setLoginLoading(false);
       setSubmitting(false);
     },
   });
@@ -73,7 +70,7 @@ const Login = () => {
 
       mutation.mutate(data);
     },
-    [submitting, loginLoading]
+    [submitting]
   );
 
   const onInvalid = (errors: FieldErrors) => {
