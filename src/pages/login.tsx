@@ -19,7 +19,7 @@ interface LoginForm {
   password: string;
   username: string;
 }
-export default function Login() {
+const Login = () => {
   const queryClient = useQueryClient();
   const {
     register,
@@ -44,7 +44,8 @@ export default function Login() {
       setLoginLoading(true);
     },
     onError: (error) => {
-      alert(error.response?.data);
+      const { message } = error.response?.data;
+      alert(message);
     },
     onSuccess: (user) => {
       console.log("로그인 성공 : user");
@@ -52,6 +53,7 @@ export default function Login() {
     },
     onSettled: () => {
       setLoginLoading(false);
+      setSubmitting(false);
     },
   });
 
@@ -199,4 +201,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

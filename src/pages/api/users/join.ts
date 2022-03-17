@@ -1,4 +1,5 @@
 import { ResponseType } from "@/types/axiosType";
+import bcrypt from "bcryptjs";
 import client from "libs/server/client";
 import withHandler from "libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -34,7 +35,10 @@ async function handler(
     if (!existUser) {
       console.log("Did not find.. so will create");
 
-      const token = await client.token.create({
+      // 비밀번호 암호화
+      const hashedPassword = bcrypt.hashSync(password, 8);
+
+      await client.token.create({
         data: {
           payload,
           user: {
@@ -44,7 +48,7 @@ async function handler(
               },
               create: {
                 email,
-                password,
+                password: hashedPassword,
                 phone,
                 nickname: nickname
                   ? nickname
