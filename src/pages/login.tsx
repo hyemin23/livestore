@@ -1,7 +1,7 @@
 import { logInAPI } from "apis/user";
 import { AxiosError } from "axios";
 import { cls } from "libs";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
@@ -19,8 +19,9 @@ interface LoginForm {
   password: string;
   username: string;
 }
-const Login: React.FC = () => {
+const Login: React.FC = (props) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const {
     register,
     watch,
@@ -45,8 +46,7 @@ const Login: React.FC = () => {
       alert(message);
     },
     onSuccess: ({ ok }: { ok: boolean }) => {
-      if (ok) Router.push("/");
-
+      if (ok) router.push("/community");
       // queryClient.setQueryData("user", user);
     },
     onSettled: () => {

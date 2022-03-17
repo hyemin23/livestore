@@ -1,9 +1,9 @@
-import Layout from "src/components/layout";
 import { NextPage } from "next";
 import React from "react";
+import Layout from "src/components/layout";
 
 // 인기 게시글은 상위 노출, 고정
-const Community: NextPage = () => {
+const Community: NextPage = (props) => {
   return (
     <Layout canGoBack hasTabBar>
       <div className="flex flex-col space-y-5 py-10 ">

@@ -36,6 +36,7 @@ async function handler(
         req.session.user = {
           id,
         };
+
         await req.session.save();
 
         return res.status(200).json({
@@ -46,4 +47,9 @@ async function handler(
   }
 }
 
-export default withApiSession(withHandler("POST", handler, true));
+export default withApiSession(
+  withHandler({
+    method: "POST",
+    handlerFunction: handler,
+  })
+);
