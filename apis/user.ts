@@ -9,5 +9,5 @@ export const registAPI = (data: {
   password: string;
   phone: string;
 }) => {
-  return axios.post("/api/users/join", data).then((res) => res.data);
+  return axios.post("/api/users/sign", data).then((res) => res.data);
 };

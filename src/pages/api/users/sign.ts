@@ -5,7 +5,7 @@ import withHandler from "libs/server/withHandler";
 import { withApiSession } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
 import twilio from "twilio";
-import { payload } from "./../../../../libs/index";
+import { payload } from "../../../../libs/index";
 
 const nodemailer = require("nodemailer");
 const mailConfig = {
@@ -102,5 +102,6 @@ export default withApiSession(
   withHandler({
     method: "POST",
     handlerFunction: handler,
+    isPrivate: false,
   })
 );
