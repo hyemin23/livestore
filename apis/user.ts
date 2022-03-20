@@ -11,3 +11,7 @@ export const registAPI = (data: {
 }) => {
   return axios.post("/api/users/sign", data).then((res) => res.data);
 };
+
+export const loadMyInfoAPI = () => {
+  return axios.get("/api/users/me").then((res) => res.data);
+};

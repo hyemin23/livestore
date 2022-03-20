@@ -31,6 +31,7 @@ const Login: React.FC = (props) => {
   } = useForm<EnterForm>();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
+
   const mutation = useMutation<
     { ok: boolean },
     AxiosError,
@@ -40,14 +41,17 @@ const Login: React.FC = (props) => {
       phone?: string;
     }
   >("user", logInAPI, {
-    onMutate: () => {},
+    onMutate: () => {
+      setSubmitting(true);
+    },
     onError: (error) => {
       const { message } = error.response?.data;
       alert(message);
     },
-    onSuccess: ({ ok }: { ok: boolean }) => {
-      if (ok) router.push("/community");
-      // queryClient.setQueryData("user", user);
+    onSuccess: () => {
+      queryClient.invalidateQueries("loadInfo");
+      console.log("성공");
+      // 지금 해야할 건 로그인한 경우에는 login page에서 접속이 불가능하도록 해야힘
     },
     onSettled: () => {
       setSubmitting(false);
@@ -66,8 +70,6 @@ const Login: React.FC = (props) => {
   // login
   const onValid = useCallback(
     (data: EnterForm) => {
-      setSubmitting(true);
-
       mutation.mutate(data);
     },
     [submitting]
