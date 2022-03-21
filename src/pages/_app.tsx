@@ -1,4 +1,5 @@
-import type { AppProps } from "next/app";
+import axios from "axios";
+import { AppProps } from "next/app";
 import Head from "next/head";
 import { useRef } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
@@ -6,9 +7,22 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const defaultQueryFn = async () => {
+    return await axios.get("/api/users/me").then((res) => res.data);
+  };
+
   const queryClientRef = useRef<QueryClient>();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        queryFn: defaultQueryFn,
+      },
+    },
+  });
+
   if (!queryClientRef.current) {
-    queryClientRef.current = new QueryClient();
+    queryClientRef.current = queryClient;
   }
 
   return (

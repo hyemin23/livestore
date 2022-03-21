@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { cls } from "libs";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import { FieldErrors, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import Button from "src/components/atoms/Button";
 import Input from "src/components/atoms/Input";
@@ -19,21 +19,33 @@ interface LoginForm {
   password: string;
   username: string;
 }
+
+interface MutationResult {
+  ok: boolean;
+}
+
 const Login: React.FC = (props) => {
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const {
-    register,
-    watch,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<EnterForm>();
+  const queryClient = useQueryClient();
+  const { register, handleSubmit, reset } = useForm<EnterForm>();
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [method, setMethod] = useState<"email" | "phone">("email");
 
+  // 로그인 정보 확인
+  const confirmMutation = useMutation<MutationResult, AxiosError>(
+    "confirm",
+    // loadMyInfoAPI,
+    {
+      onSuccess: (data) => {
+        if (data?.ok) {
+          router.push("/community");
+        }
+      },
+    }
+  );
+
   const mutation = useMutation<
-    { ok: boolean },
+    MutationResult,
     AxiosError,
     {
       email: string;
@@ -50,8 +62,7 @@ const Login: React.FC = (props) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries("loadInfo");
-      console.log("성공");
-      // 지금 해야할 건 로그인한 경우에는 login page에서 접속이 불가능하도록 해야힘
+      return router.push("/");
     },
     onSettled: () => {
       setSubmitting(false);
@@ -75,10 +86,10 @@ const Login: React.FC = (props) => {
     [submitting]
   );
 
-  const onInvalid = (errors: FieldErrors) => {
-    // password 일치하는지 검사
-    console.log(errors);
-  };
+  // 로그인된 상
+  // useEffect(() => {
+  //   confirmMutation.mutate();
+  // }, []);
 
   return (
     <div className="mt-16 px-4">
@@ -113,7 +124,7 @@ const Login: React.FC = (props) => {
         </div>
         <form
           className="flex flex-col mt-8 space-y-5"
-          onSubmit={handleSubmit(onValid, onInvalid)}
+          onSubmit={handleSubmit(onValid)}
         >
           <div className="mt-1">
             {method === "email" ? (
@@ -202,4 +213,31 @@ const Login: React.FC = (props) => {
   );
 };
 
+// cloud front로 배포할 예정이면 getServerSide 대신에 mutation 요청으로 useEffect로 분기하기
+// 일단은 getServerSideProps로 대체
+// export const getServerSideProps = async (
+//   context: GetServerSidePropsContext
+// ) => {
+//   const cookie = context.req ? context.req.headers.cookie : "";
+//   if (context.req && cookie) {
+//     axios.defaults.headers.Cookie = cookie;
+//   }
+
+//   const response = await loadMyInfoAPI();
+
+// console.log("response : ", response);
+
+// if (response.data) {
+//   return {
+//     redirect: {
+//       destination: "/",
+//       permanent: false,
+//     },
+//   };
+// }
+
+//   return {
+//     props: {},
+//   };
+// };
 export default Login;
