@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  // 공통 함수
   const defaultQueryFn = async () => {
     return await axios.get("/api/users/me").then((res) => res.data);
   };
