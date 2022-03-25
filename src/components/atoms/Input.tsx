@@ -56,8 +56,7 @@ const Input: React.FC<InputProps> = ({
             type={type}
             {...rest}
             placeholder={placeholder}
-            className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary
-            "
+            className="appearance-none w-full pl-7 px-3 py-2 border  border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary"
           />
           <div className="absolute right-0 pointer-events-none pr-3 flex items-center">
             <span className="text-gray-500">KRW</span>
