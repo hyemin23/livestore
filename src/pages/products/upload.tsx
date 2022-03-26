@@ -1,12 +1,14 @@
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import TextArea from "@/components/atoms/TextArea";
+import { Product } from "@prisma/client";
 import { uploadAPI } from "apis/post";
 import { AxiosError } from "axios";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 
 interface UploadProductForm {
   name: string;
@@ -14,25 +16,48 @@ interface UploadProductForm {
   description: string;
 }
 
-const Upload: NextPage = (props) => {
-  const queryClient = useQueryClient();
-  const { register, handleSubmit } = useForm<UploadProductForm>();
-  const [loading, setLoading] = useState(false);
+interface UploadProductMutation {
+  ok: boolean;
+  product: Product;
+}
 
-  const mutation = useMutation<void, AxiosError>(uploadAPI, {
+const Upload: NextPage = (props) => {
+  // const queryClient = useQueryClient();
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  const { register, handleSubmit } = useForm<UploadProductForm>();
+
+  const mutation = useMutation<
+    UploadProductMutation,
+    AxiosError,
+    UploadProductForm
+  >("uploadPost", (data) => uploadAPI(data), {
     onMutate: () => {
-      setLoading(true);
+      setSubmitting(true);
     },
     onError: (error) => {
       alert(error.response?.data);
     },
-    onSuccess: () => {},
+    onSuccess: (data: UploadProductMutation) => {
+      console.log(data);
+
+      if (data?.ok) {
+        router.push(`/products/${data.product.id}`);
+      }
+    },
     onSettled: () => {
-      setLoading(false);
+      setSubmitting(false);
     },
   });
 
-  const onValid = (data: UploadProductForm) => {};
+  const onValid = useCallback(
+    (data: UploadProductForm) => {
+      mutation.mutate(data);
+    },
+    [submitting]
+  );
+
   return (
     <div className="px-4 py-16">
       <form onSubmit={handleSubmit(onValid)}>
@@ -81,8 +106,11 @@ const Upload: NextPage = (props) => {
           required
         />
 
-        <Button className="mt-4 w-full py-2 px-4 border-transparent border border-gray-300 text-primary rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none hover:bg-primary hover:text-white">
-          {loading ? "업로드 중" : "업로드"}
+        <Button
+          type="submit"
+          className="mt-4 w-full py-2 px-4 border-transparent border border-gray-300 text-primary rounded-md shadow-sm text-sm font-medium focus:ring-2 focus:ring-offset-2 focus:outline-none hover:bg-primary hover:text-white"
+        >
+          {mutation.isLoading ? "업로드 중" : "업로드"}
         </Button>
       </form>
     </div>

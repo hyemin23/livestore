@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const uploadAPI = (data: any) => {
-  return axios.post("/api/post/upload", data).then((res) => res.data);
+  return axios.post("/api/products", data).then((res) => res.data);
 };
