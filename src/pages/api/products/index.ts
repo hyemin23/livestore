@@ -7,6 +7,17 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
+  // GET
+  if (req.method === "GET") {
+    // 여러개 상품 가져오기
+    const products = await client.product.findMany({});
+    return res.json({
+      ok: true,
+      products,
+    });
+  }
+
+  // POST
   const {
     body: { name, price, description },
     session: { user },
@@ -34,7 +45,7 @@ async function handler(
 
 export default withApiSession(
   withHandler({
-    method: "POST",
+    methods: ["GET", "POST"],
     handlerFunction: handler,
     isPrivate: true,
   })

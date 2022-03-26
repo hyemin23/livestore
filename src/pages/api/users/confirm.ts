@@ -30,5 +30,5 @@ async function hanler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 export default withApiSession(
-  withHandler({ method: "POST", handlerFunction: hanler, isPrivate: false })
+  withHandler({ methods: ["POST"], handlerFunction: hanler, isPrivate: false })
 );

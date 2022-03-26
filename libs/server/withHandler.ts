@@ -2,7 +2,7 @@ import { ConfigType } from "@/types/index";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default function withHandler({
-  method,
+  methods,
   isPrivate = true,
   handlerFunction,
 }: ConfigType) {
@@ -10,7 +10,7 @@ export default function withHandler({
     req: NextApiRequest,
     res: NextApiResponse
   ): Promise<any> {
-    if (req.method !== method) {
+    if (req.method && !methods.includes(req.method as any)) {
       return res.status(405).end();
     }
 

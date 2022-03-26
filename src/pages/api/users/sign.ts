@@ -100,7 +100,7 @@ async function handler(
 // private handler (login case)
 export default withApiSession(
   withHandler({
-    method: "POST",
+    methods: ["POST"],
     handlerFunction: handler,
     isPrivate: false,
   })

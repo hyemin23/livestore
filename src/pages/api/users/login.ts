@@ -49,7 +49,7 @@ async function handler(
 
 export default withApiSession(
   withHandler({
-    method: "POST",
+    methods: ["POST"],
     handlerFunction: handler,
     isPrivate: false,
   })

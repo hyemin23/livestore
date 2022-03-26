@@ -17,7 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 // pulic handler (not login case )
 export default withApiSession(
   withHandler({
-    method: "GET",
+    methods: ["GET"],
     handlerFunction: handler,
     isPrivate: false,
   })
