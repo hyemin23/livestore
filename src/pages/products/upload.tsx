@@ -1,27 +1,17 @@
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import TextArea from "@/components/atoms/TextArea";
-import { Product } from "@prisma/client";
-import { uploadAPI } from "apis/post";
+import { uploadAPI } from "apis/products";
 import { AxiosError } from "axios";
+import { UploadProductMutation } from "interface/product";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import { UploadProductForm } from "src/interface/product";
 
-interface UploadProductForm {
-  name: string;
-  price: number;
-  description: string;
-}
-
-interface UploadProductMutation {
-  ok: boolean;
-  product: Product;
-}
-
-const Upload: NextPage = (props) => {
+const Upload: NextPage = () => {
   // const queryClient = useQueryClient();
   const router = useRouter();
   const [submitting, setSubmitting] = useState<boolean>(false);
