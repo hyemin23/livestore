@@ -1,13 +1,18 @@
-import { Product } from "@prisma/client";
+import { Product, User } from "@prisma/client";
 import { getProductAPI } from "apis/products";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import { useQuery } from "react-query";
 
-interface ResponseProductType {
+interface ProductWithUser extends Product {
+  user: User;
+}
+
+interface ResponseProductDetailType {
   ok: boolean;
-  product: Product;
+  product: ProductWithUser;
+  relatedProducts: Product[];
 }
 
 const CommunityPstDetail = () => {
@@ -15,22 +20,26 @@ const CommunityPstDetail = () => {
   const { id } = router.query;
 
   // id가 존재할 때 query 요청을 보냄
-  const { data, error, isLoading } = useQuery<ResponseProductType, AxiosError>(
-    "getProduct",
-    () => getProductAPI(Number(id)),
-    {
-      enabled: !!id,
-    }
-  );
+  const { data, error, isLoading } = useQuery<
+    ResponseProductDetailType,
+    AxiosError
+  >("getProduct", () => getProductAPI(Number(id)), {
+    enabled: !!id,
+  });
+
+  console.log("data", data);
 
   return (
+    !error &&
     !isLoading && (
       <div className="px-4 py-10">
         <div className="mb-8">
           <div className="flex py-3 obrder-t border-b items-center space-x-3">
             <div className="w-12 h-12 rounded-full bg-slate-200" />
             <div>
-              <p className="text-sm font-medium text-gray-600">Steve Jebs</p>
+              <p className="text-sm font-medium text-gray-600">
+                {data?.product?.user?.nickname}
+              </p>
               <p className="text-sm font-medium text-gray-400">
                 View profile &rarr;
               </p>
@@ -109,6 +118,22 @@ const CommunityPstDetail = () => {
               <button className="w-full flex-1 border border-primary rounded-md text-primary py-3 focus:outline-none focus:ring-2  transition-colors focus:ring-offset-2 focus:ring-primary font-medium hover:bg-primary hover:text-white">
                 댓글달기
               </button>
+            </div>
+
+            {/* 유사상품 */}
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">유사 상품</h2>
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                {data?.relatedProducts.map((product) => (
+                  <div key={product.id}>
+                    <div className="h-56 w-full mb-4 bg-slate-300" />
+                    <h3 className="text-gray-700 -mb-1">{product.name}</h3>
+                    <span className="text-sm font-medium text-gray-900">
+                      {product.price}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

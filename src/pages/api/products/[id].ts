@@ -8,10 +8,40 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
     where: {
       id: Number(id.toString()),
     },
+    include: {
+      user: {
+        select: {
+          id: true,
+          nickname: true,
+          avatar: true,
+        },
+      },
+    },
   });
+
+  // 검색 품목 배열화
+  const terms = product?.name.split(" ").map((word) => ({
+    name: {
+      contains: word,
+    },
+  }));
+
+  // 유사 품목 키워드 나눠서 다 찾기
+  const relatedProducts = await client.product.findMany({
+    where: {
+      OR: terms,
+      AND: {
+        id: {
+          not: product?.id,
+        },
+      },
+    },
+  });
+
   res.json({
     ok: true,
     product,
+    relatedProducts,
   });
 }
 
