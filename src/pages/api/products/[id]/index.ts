@@ -3,7 +3,10 @@ import withHandler from "libs/server/withHandler";
 import { withApiSession } from "libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
 export async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
+  const {
+    query: { id },
+    session: { user },
+  } = req;
   const product = await client.product.findUnique({
     where: {
       id: Number(id.toString()),
@@ -38,10 +41,27 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
+  // 좋아요
+  const isLiked = Boolean(
+    await client.fav.findFirst({
+      where: {
+        productId: product?.id,
+        userId: user?.id,
+      },
+      // 모든 필드를 가져오지 않도록
+      select: {
+        id: true,
+      },
+    })
+  );
+
+  console.log("isLiked: ", isLiked);
+
   res.json({
     ok: true,
     product,
     relatedProducts,
+    isLiked,
   });
 }
 

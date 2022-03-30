@@ -21,7 +21,7 @@ async function handler(
     },
   });
 
-  // 좋아요가 있다면 해당 상품 좋아요 제rj
+  // 좋아요가 있다면 해당 상품 좋아요 제거
   if (alreadyExists) {
     await client.fav.delete({
       where: {

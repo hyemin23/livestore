@@ -1,6 +1,38 @@
+import { Product, User } from "@prisma/client";
+import { postLikeAPI } from "apis/products";
+import { cls } from "libs";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
-const ItemDetail: NextPage = () => {
+interface ProductWithUser extends Product {
+  user: User;
+}
+
+interface ItemDetailResponse {
+  ok: boolean;
+  product: ProductWithUser;
+  relatedProducts: Product[];
+  isLiked: boolean;
+}
+const ItemDetail: NextPage<ItemDetailResponse> = ({
+  product,
+  relatedProducts,
+  isLiked,
+}) => {
+  const router = useRouter();
+  const { refetch } = useQuery(
+    `fav`,
+    () => postLikeAPI(Number(router.query.id)),
+    {
+      enabled: false,
+    }
+  );
+  const onFavClick = () => {
+    console.log("onFavClick");
+    refetch();
+  };
+
   return (
     <div className="px-4 py-10">
       <div className="mb-8">
@@ -31,7 +63,15 @@ const ItemDetail: NextPage = () => {
             <button className="flex-1 border border-primary rounded-md text-primary py-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary font-medium hover:bg-primary hover:text-white">
               Talk to seller
             </button>
-            <button className="flex items-center p-3 text-primary rounded-md justify-center hover:bg-gray-100">
+            <button
+              onClick={() => onFavClick()}
+              className={cls(
+                `flex items-center p-3  rounded-md justify-center hover:bg-gray-100 `,
+                isLiked
+                  ? "text-primary hover:text-red-600"
+                  : "text-gray-400 hover:text-gray-500"
+              )}
+            >
               <svg
                 className="h-6 w-6 "
                 xmlns="http://www.w3.org/2000/svg"

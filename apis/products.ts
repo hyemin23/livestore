@@ -12,3 +12,7 @@ export const getProductsAPI = () => {
 export const getProductAPI = (id: number) => {
   return axios.get(`/api/products/${id}`).then((res) => res.data);
 };
+
+export const postLikeAPI = (id: number) => {
+  return axios.post(`/api/products/${id}/fav`).then((res) => res.data);
+};
