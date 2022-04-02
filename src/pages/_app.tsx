@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  // 공통 함수
+  // 공통 함수 매요청마다 내 정보가 들어있는지 확인해주는 함수
   const defaultQueryFn = async () => {
     return await axios.get("/api/users/me").then((res) => res.data);
   };
@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     defaultOptions: {
       queries: {
         queryFn: defaultQueryFn,
+        refetchOnWindowFocus: false,
       },
     },
   });
