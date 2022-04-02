@@ -1,5 +1,6 @@
 import LikedIcon from "@/components/icons/LikedIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
+import CommentWriteComponents from "@/components/organs/products/CommentWrite.components";
 import { Product, User } from "@prisma/client";
 import { getProductAPI, postLikeAPI } from "apis/products";
 import { AxiosError } from "axios";
@@ -117,50 +118,8 @@ const CommunityPstDetail = () => {
             {/* 신고버튼 */}
 
             {/* 댓글 */}
-            <div className="px-4 my-5 space-y-5">
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-full bg-slate-200" />
-                <div>
-                  <span className="text-sm block font-medium text-gray-700">
-                    hyemin
-                  </span>
-                  <span className="text-xs block text-gray-500">2 시간 전</span>
-                  <p className="text-gray-700 mt-2">
-                    저 이거 어디서 샀어요...?
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-full bg-slate-200" />
-                <div>
-                  <span className="text-sm block font-medium text-gray-700">
-                    hyemin
-                  </span>
-                  <span className="text-xs block text-gray-500">2 시간 전</span>
-                  <p className="text-gray-700 mt-2">
-                    저 이거 어디서 샀어요...?
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-full bg-slate-200" />
-                <div>
-                  <span className="text-sm block font-medium text-gray-700">
-                    hyemin2
-                  </span>
-                  <span className="text-xs block text-gray-500">2 시간 전</span>
-                  <p className="text-gray-700 mt-2">
-                    저 이거 어디서 샀어요...?
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-between space-x-2 space-y-4">
-              <textarea className="w-full" />
-              <button className="w-full flex-1 border border-primary rounded-md text-primary py-3 focus:outline-none focus:ring-2  transition-colors focus:ring-offset-2 focus:ring-primary font-medium hover:bg-primary hover:text-white">
-                댓글달기
-              </button>
-            </div>
+
+            <CommentWriteComponents />
 
             {/* 유사상품 */}
             <div>

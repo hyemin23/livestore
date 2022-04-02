@@ -40,7 +40,6 @@ const Community: NextPage = () => {
         {!isLoading &&
           !error &&
           data?.products?.map((product, i: number) => (
-            // <Item />
             <ProductsListComponent
               key={i}
               id={product.id}
