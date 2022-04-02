@@ -1,21 +1,29 @@
+import LikedIcon from "@/components/icons/LikedIcon";
+import UnLikedIcon from "@/components/icons/UnLikedIcon";
 import { Product, User } from "@prisma/client";
-import { getProductAPI } from "apis/products";
+import { getProductAPI, postLikeAPI } from "apis/products";
 import { AxiosError } from "axios";
+import { CommonResponseMutation } from "interface/product";
+import { cls } from "libs";
 import { useRouter } from "next/router";
 import React from "react";
-import { useQuery } from "react-query";
-
+import { useMutation, useQuery, useQueryClient } from "react-query";
 interface ProductWithUser extends Product {
   user: User;
+  _count: {
+    favs: number;
+  };
 }
 
 interface ResponseProductDetailType {
   ok: boolean;
   product: ProductWithUser;
   relatedProducts: Product[];
+  isLiked: boolean;
 }
 
 const CommunityPstDetail = () => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { id } = router.query;
 
@@ -27,7 +35,46 @@ const CommunityPstDetail = () => {
     enabled: !!id,
   });
 
-  console.log("data", data);
+  const likeMutation = useMutation<CommonResponseMutation, AxiosError, number>(
+    "postLike",
+    (id: number) => postLikeAPI(id),
+    {
+      // 좋아요 기능에 optimistic update 적용
+      // 나중에 비회원들도 생각한 홈페이지를 만들었을 때, 접속중인지 확인도 필요함.
+      // 현재는 회원들만 가능한다는 전제하에 사용하기 때문에 따로 로그인 여부를 확인 할 필요가 없음.
+      onMutate() {
+        queryClient.setQueryData<ResponseProductDetailType>(
+          "getProduct",
+          (data): any => {
+            // 나의 좋아요를 판단하여 해당 게시글에 먼저 index를 올려준다.
+            // onMutate이므로 mutate되기 전 상태 따라서 ! 로 반대 상황으로 가정해야함.
+            const myLike = !data?.isLiked;
+            const myLikeCount = myLike ? 1 : -1;
+
+            // 해당 게시글의 좋아요, 좋아요 수 미리 업데이트
+            const newLikedData = {
+              ...data,
+              isLiked: !data?.isLiked,
+              product: {
+                ...data?.product,
+                _count: {
+                  ...data?.product._count,
+                  favs: Number(data?.product._count.favs || 0) + myLikeCount,
+                },
+              },
+            };
+
+            return newLikedData;
+          }
+        );
+      },
+      onSuccess() {
+        queryClient.refetchQueries("getProduct");
+      },
+    }
+  );
+
+  const onFavClick = () => likeMutation.mutate(Number(id));
 
   return (
     !error &&
@@ -54,22 +101,17 @@ const CommunityPstDetail = () => {
             </p>
 
             {/* 추천버튼 */}
-            <div className="flex space-x-0.5 items-center text-gray-500 cursor-pointer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            <div className="flex space-x-0.5 items-center text-gray-500">
+              <button
+                onClick={onFavClick}
+                className={cls(
+                  `p-3 rounded-md flex items-center hover:bg-gray-100 justify-center `,
+                  !data?.isLiked ? "text-secondary hover:text-primary" : ""
+                )}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-              <span className="select-none">2</span>
+                {data?.isLiked ? <LikedIcon /> : <UnLikedIcon />}
+              </button>
+              <span className="select-none">{data?.product._count.favs}</span>
             </div>
 
             {/* 신고버튼 */}

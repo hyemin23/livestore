@@ -4,3 +4,7 @@ export interface UploadProductMutation {
   ok: boolean;
   product: Product;
 }
+
+export interface CommonResponseMutation {
+  ok: boolean;
+}

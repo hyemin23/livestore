@@ -10,7 +10,15 @@ async function handler(
   // GET
   if (req.method === "GET") {
     // 여러개 상품 가져오기
-    const products = await client.product.findMany({});
+    const products = await client.product.findMany({
+      include: {
+        _count: {
+          select: {
+            favs: true,
+          },
+        },
+      },
+    });
     return res.json({
       ok: true,
       products,

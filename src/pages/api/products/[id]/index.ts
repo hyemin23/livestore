@@ -19,6 +19,11 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
           avatar: true,
         },
       },
+      _count: {
+        select: {
+          favs: true,
+        },
+      },
     },
   });
 
@@ -54,8 +59,6 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     })
   );
-
-  console.log("isLiked: ", isLiked);
 
   res.json({
     ok: true,
