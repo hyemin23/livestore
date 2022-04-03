@@ -1,7 +1,8 @@
+import CommentIcon from "@/components/icons/CommentIcon";
 import LikedIcon from "@/components/icons/LikedIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
 import CommentWriteComponents from "@/components/organs/products/CommentWrite.components";
-import { Product, User } from "@prisma/client";
+import { Comments, Product, User } from "@prisma/client";
 import { getProductAPI, postLikeAPI } from "apis/products";
 import { AxiosError } from "axios";
 import { CommonResponseMutation } from "interface/product";
@@ -9,11 +10,17 @@ import { cls } from "libs";
 import { useRouter } from "next/router";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+
+export interface CommentsTypes extends Comments {
+  user: User;
+}
 interface ProductWithUser extends Product {
   user: User;
   _count: {
+    comments: number;
     favs: number;
   };
+  comments: CommentsTypes[];
 }
 
 interface ResponseProductDetailType {
@@ -86,7 +93,7 @@ const CommunityPstDetail = () => {
             <div className="w-12 h-12 rounded-full bg-slate-200" />
             <div>
               <p className="text-sm font-medium text-gray-600">
-                {data?.product?.user?.nickname}
+                {data?.product.user.nickname}
               </p>
               <p className="text-sm font-medium text-gray-400">
                 View profile &rarr;
@@ -106,20 +113,31 @@ const CommunityPstDetail = () => {
               <button
                 onClick={onFavClick}
                 className={cls(
-                  `p-3 rounded-md flex items-center hover:bg-gray-100 justify-center `,
+                  `p-2 rounded-md flex items-center hover:bg-gray-100 justify-center `,
                   !data?.isLiked ? "text-secondary hover:text-primary" : ""
                 )}
               >
                 {data?.isLiked ? <LikedIcon /> : <UnLikedIcon />}
               </button>
-              <span className="select-none">{data?.product._count.favs}</span>
+              <span className="select-none text-sm pt-1">
+                {data?.product._count.favs}
+              </span>
+
+              {/* 댓글 아이콘 */}
+              <div className="p-2 flex text-secondary ">
+                <CommentIcon />
+              </div>
+              <span className="select-none text-sm pt-1">
+                {data?.product._count.comments}
+              </span>
             </div>
 
             {/* 신고버튼 */}
 
             {/* 댓글 */}
-
-            <CommentWriteComponents />
+            {data?.product.comments && (
+              <CommentWriteComponents comments={data.product.comments} />
+            )}
 
             {/* 유사상품 */}
             <div>

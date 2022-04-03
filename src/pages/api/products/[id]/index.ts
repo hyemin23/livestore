@@ -19,8 +19,24 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
           avatar: true,
         },
       },
+
+      comments: {
+        select: {
+          id: true,
+          contents: true,
+          updatedAt: true,
+          user: {
+            select: {
+              nickname: true,
+              id: true,
+            },
+          },
+        },
+      },
+
       _count: {
         select: {
+          comments: true,
           favs: true,
         },
       },
