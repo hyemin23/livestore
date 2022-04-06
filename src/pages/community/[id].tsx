@@ -1,6 +1,7 @@
 import CommentIcon from "@/components/icons/CommentIcon";
 import LikedIcon from "@/components/icons/LikedIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
+import Layout from "@/components/layout";
 import CommentWriteComponents from "@/components/organs/products/CommentWrite.components";
 import { Comments, Product, User } from "@prisma/client";
 import { getProductAPI, postLikeAPI } from "apis/products";
@@ -87,76 +88,82 @@ const CommunityPstDetail = () => {
   return (
     !error &&
     !isLoading && (
-      <div className="px-4 py-10">
-        <div className="mb-8">
-          <div className="flex py-3 obrder-t border-b items-center space-x-3">
-            <div className="w-12 h-12 rounded-full bg-slate-200" />
-            <div>
-              <p className="text-sm font-medium text-gray-600">
-                {data?.product.user.nickname}
-              </p>
-              <p className="text-sm font-medium text-gray-400">
-                View profile &rarr;
-              </p>
-            </div>
-          </div>
-          <div className="mt-5">
-            <h1 className="text-2xl font-bold text-gray-900">
-              {data?.product.name}
-            </h1>
-            <p className="text-base my-6 text-gray-700">
-              {data?.product.description}
-            </p>
-
-            {/* 추천버튼 */}
-            <div className="flex space-x-0.5 items-center text-gray-500">
-              <button
-                onClick={onFavClick}
-                className={cls(
-                  `p-2 rounded-md flex items-center hover:bg-gray-100 justify-center `,
-                  !data?.isLiked ? "text-secondary hover:text-primary" : ""
-                )}
-              >
-                {data?.isLiked ? <LikedIcon /> : <UnLikedIcon />}
-              </button>
-              <span className="select-none text-sm pt-1">
-                {data?.product._count.favs}
-              </span>
-
-              {/* 댓글 아이콘 */}
-              <div className="p-2 flex text-secondary ">
-                <CommentIcon />
+      <>
+        <Layout title="커뮤니티" hasTabBar>
+          <div className="px-4 py-10">
+            <div className="mb-8">
+              <div className="flex py-3 obrder-t border-b items-center space-x-3">
+                <div className="w-12 h-12 rounded-full bg-slate-200" />
+                <div>
+                  <p className="text-sm font-medium text-gray-600">
+                    {data?.product.user.nickname}
+                  </p>
+                  <p className="text-sm font-medium text-gray-400">
+                    View profile &rarr;
+                  </p>
+                </div>
               </div>
-              <span className="select-none text-sm pt-1">
-                {data?.product._count.comments}
-              </span>
-            </div>
+              <div className="mt-5">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {data?.product.name}
+                </h1>
+                <p className="text-base my-6 text-gray-700">
+                  {data?.product.description}
+                </p>
 
-            {/* 신고버튼 */}
+                {/* 추천버튼 */}
+                <div className="flex space-x-0.5 items-center text-gray-500">
+                  <button
+                    onClick={onFavClick}
+                    className={cls(
+                      `p-2 rounded-md flex items-center hover:bg-gray-100 justify-center `,
+                      !data?.isLiked ? "text-secondary hover:text-primary" : ""
+                    )}
+                  >
+                    {data?.isLiked ? <LikedIcon /> : <UnLikedIcon />}
+                  </button>
+                  <span className="select-none text-sm pt-1">
+                    {data?.product._count.favs}
+                  </span>
 
-            {/* 댓글 */}
-            {data?.product.comments && (
-              <CommentWriteComponents comments={data.product.comments} />
-            )}
-
-            {/* 유사상품 */}
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">유사 상품</h2>
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                {data?.relatedProducts.map((product) => (
-                  <div key={product.id}>
-                    <div className="h-56 w-full mb-4 bg-slate-300" />
-                    <h3 className="text-gray-700 -mb-1">{product.name}</h3>
-                    <span className="text-sm font-medium text-gray-900">
-                      {product.price}
-                    </span>
+                  {/* 댓글 아이콘 */}
+                  <div className="p-2 flex text-secondary ">
+                    <CommentIcon />
                   </div>
-                ))}
+                  <span className="select-none text-sm pt-1">
+                    {data?.product._count.comments}
+                  </span>
+                </div>
+
+                {/* 신고버튼 */}
+
+                {/* 댓글 */}
+                {data?.product.comments && (
+                  <CommentWriteComponents comments={data.product.comments} />
+                )}
+
+                {/* 유사상품 */}
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    유사 상품
+                  </h2>
+                  <div className="mt-6 grid grid-cols-2 gap-4">
+                    {data?.relatedProducts.map((product) => (
+                      <div key={product.id}>
+                        <div className="h-56 w-full mb-4 bg-slate-300" />
+                        <h3 className="text-gray-700 -mb-1">{product.name}</h3>
+                        <span className="text-sm font-medium text-gray-900">
+                          {product.price}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Layout>
+      </>
     )
   );
 };
