@@ -17,6 +17,11 @@ async function handler(
             favs: true,
           },
         },
+        user: {
+          select: {
+            nickname: true,
+          },
+        },
       },
     });
     return res.json({
