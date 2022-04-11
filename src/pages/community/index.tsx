@@ -10,6 +10,10 @@ import Layout from "src/components/layout";
 
 interface CommunityResponseType extends Product {
   user: { nickname: string };
+  _count: {
+    comments: number;
+    favs: number;
+  };
 }
 interface ProductsResponse {
   ok: boolean;
@@ -53,6 +57,8 @@ const Community: NextPage = () => {
               description={product.description}
               image={product.image}
               nickname={product.user.nickname}
+              favCount={product._count.favs}
+              commentCount={product._count.comments}
             />
           ))}
         <button className="fixed bottom-14 right-5 bg-white rounded-full p-4 text-primary border border-primary shadow-xl hover:bg-primary hover:text-white transition-colors cursor-pointer">

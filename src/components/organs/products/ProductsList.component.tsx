@@ -1,5 +1,4 @@
 import CommentIcon from "@/components/icons/CommentIcon";
-import CountIcon from "@/components/icons/CountIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
 import WritePersonIcon from "@/components/icons/WritePersonIcon";
 import Link from "next/link";
@@ -12,6 +11,8 @@ interface ProductProps {
   price: number;
   image: string;
   nickname: string;
+  favCount: number;
+  commentCount: number;
 }
 
 const ProductsListComponent = ({
@@ -19,6 +20,8 @@ const ProductsListComponent = ({
   title,
   description,
   nickname,
+  favCount,
+  commentCount,
 }: ProductProps) => {
   return (
     <Link href={`/community/${id}`}>
@@ -51,22 +54,20 @@ const ProductsListComponent = ({
               {/* 댓글 */}
               <div className="flex space-x-0.5 items-center text-gray-500 cursor-pointer">
                 <CommentIcon />
-                <span className="select-none text-sm">1</span>
+                <span className="select-none text-sm">{commentCount}</span>
               </div>
 
               {/* 좋아요  */}
               <div className="flex space-x-0.5 items-center text-gray-500 cursor-pointer">
                 <UnLikedIcon />
-                <span className="select-none text-sm">
-                  {/* {products._count.fav} */}
-                </span>
+                <span className="select-none text-sm">{favCount}</span>
               </div>
 
               {/* 조회수 */}
-              <div className="flex space-x-0.5 items-center text-gray-500 cursor-pointer">
+              {/* <div className="flex space-x-0.5 items-center text-gray-500 cursor-pointer">
                 <CountIcon />
                 <span className="select-none text-sm">2</span>
-              </div>
+              </div> */}
 
               {/* 작성자 */}
               <div className="flex space-x-0.5 items-center text-gray-500 self-start cursor-pointer">
