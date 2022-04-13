@@ -13,19 +13,23 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique
-  nickname  String     @unique
-  password  String
-  phone     String     @unique
-  avatar    String?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  tokens    Token[]
-  Product   Product[]
-  fav       Fav[]
-  Posts     Posts[]
-  Comments  Comments[]
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  nickname String   @unique
+  password String
+  phone    String   @unique
+  avatar   String?
+  role     RoleType @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tokens   Token[]
+  Product  Product[]
+  fav      Fav[]
+  Posts    Posts[]
+  Comments Comments[]
+
 }
 
 model Token {
@@ -35,26 +39,6 @@ model Token {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    Int
-}
-
-// 국가
-model Country {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Site      Site[]
-}
-
-// 사이트 목록
-model Site {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  contry    Country @relation(fields: [countryId], references: [id])
-  countryId Int
 }
 
 // 상품
@@ -89,36 +73,50 @@ model Fav {
 
 // 게시글
 model Posts {
-  id        Int      @id @default(autoincrement())
-  title     String
-  type      Type     @relation(fields: [typeId], references: [id], onDelete: Cascade)
-  typeId    Int
+  id    Int    @id @default(autoincrement())
+  title String
+
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // post_in_categories post_in_categories[]
+  categories Category[] @relation(references: [id])
 }
 
 // 카테고리
-model Type {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  Posts     Posts[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Category {
+  id        Int          @id @default(autoincrement())
+  name      CategoryType @default(FREE)
+  Posts     Posts[]      @relation(references: [id])
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 // 댓글
 model Comments {
   id        Int      @id @default(autoincrement())
   contents  String   @db.MediumText
-  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+}
+
+// 권한 타입
+enum RoleType {
+  USER
+  ADMIN
+}
+
+// 게시글 타입
+enum CategoryType {
+  FREE
+  JOB
+  RECURIT
 }
