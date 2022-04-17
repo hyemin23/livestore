@@ -73,25 +73,36 @@ model Fav {
 
 // 게시글
 model Posts {
-  id    Int    @id @default(autoincrement())
-  title String
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user       User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  categories CategoriesOnPosts[]
 
-  // post_in_categories post_in_categories[]
-  categories Category[] @relation(references: [id])
 }
 
 // 카테고리
 model Category {
-  id        Int          @id @default(autoincrement())
-  name      CategoryType @default(FREE)
-  Posts     Posts[]      @relation(references: [id])
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id        Int                 @id @default(autoincrement())
+  name      CategoryType        @unique @default(FREE)
+  posts     CategoriesOnPosts[]
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+}
+
+model CategoriesOnPosts {
+  posts      Posts    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@id([postId, categoryId])
 }
 
 // 댓글
@@ -117,6 +128,6 @@ enum RoleType {
 // 게시글 타입
 enum CategoryType {
   FREE
-  JOB
+  SCORE
   RECURIT
 }
