@@ -32,9 +32,9 @@ const Upload = () => {
       alert(error.response?.data);
     },
     onSuccess: (data: UploadPostsMutation) => {
-      console.log("업로드 성공 : ", data);
       if (data?.ok) {
-        // router.push(`/posts/${data.posts.id}`);
+        // 메인으로
+        router.push(`/`);
       }
     },
 
@@ -76,7 +76,6 @@ const Upload = () => {
         />
 
         {/* 글쓰기 타입 */}
-
         <TextArea
           register={register("description", {
             required: true,

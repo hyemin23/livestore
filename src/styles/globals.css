@@ -6,7 +6,15 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
+  select{
+    text-align-last: center;
+    text-align : center;
+    -ms-text-align-last: center;
+    -moz-text-align-last: center;
+  }
+
   @font-face {
     font-family: "GmarketSans";
     font-weight: 700;

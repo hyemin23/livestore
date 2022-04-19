@@ -12,40 +12,52 @@ async function handler(
     const commonProps: any = {
       take: 5,
       orderBy: {
-        createAt: "desc",
+        createdAt: "desc",
       },
     };
 
-    const freePosts = await client.posts.findMany({
-      ...commonProps,
+    const free = await client.posts.findMany({
       where: {
         categories: {
           some: {
-            name: "FREE",
-          },
-        },
-      },
-      include: {
-        user: {
-          select: {
-            nickname: true,
+            category: {
+              name: "FREE",
+            },
           },
         },
       },
     });
 
-    console.log("freePosts", freePosts);
-    const jobPosts = await client.posts.findMany({});
+    const job = await client.posts.findMany({
+      where: {
+        categories: {
+          some: {
+            category: {
+              name: "RECURIT",
+            },
+          },
+        },
+      },
+    });
 
-    const recuritPosts = await client.posts.findMany({});
-    // 타입이 있는 경우에는 개별 조회
+    const recurit = await client.posts.findMany({
+      where: {
+        categories: {
+          some: {
+            category: {
+              name: "SCORE",
+            },
+          },
+        },
+      },
+    });
 
     return res.json({
       ok: true,
       posts: {
-        freePosts,
-        jobPosts,
-        recuritPosts,
+        free,
+        job,
+        recurit,
       },
     });
   }
@@ -83,11 +95,13 @@ async function handler(
     },
   });
 
-  console.log("createPost", createPost);
+  return res.json({
+    ok: true,
+  });
 }
 export default withApiSession(
   withHandler({
-    methods: ["POST"],
+    methods: ["POST", "GET"],
     handlerFunction: handler,
     isPrivate: true,
   })
