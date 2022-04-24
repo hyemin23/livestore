@@ -9,6 +9,10 @@ export const getPostsAPI = () => {
   return axios.get("/api/posts").then((res) => res.data);
 };
 
-export const getPostAPI = (id: Number) => {
+export const getPostTypeAPI = (type: Number) => {
+  return axios.get(`/api/posts/type/${type}`).then((res) => res.data);
+};
+
+export const getPostSearchAPI = (id: Number) => {
   return axios.get(`/api/posts/${id}`).then((res) => res.data);
 };

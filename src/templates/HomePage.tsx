@@ -1,7 +1,7 @@
 import SettingIcon from "@/components/icons/SettingIcon";
 import SettingPlusIcon from "@/components/icons/SettingPlusIcon";
 import SearchBarComponents from "@/components/molecules/SearchBar.components";
-import CommunityListComponent from "@/components/organs/community/CommunityList.component";
+import CommunityListComponent from "@/components/organs/posts/PostsList.component";
 import { cls } from "libs";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -10,7 +10,7 @@ const getMenu = () => [
   { name: "홈", key: "homePosts" },
   { name: "자유게시판", key: "freePosts" },
   { name: "일일알바", key: "jobPosts" },
-  { name: "구인구직", key: "recuritPosts" },
+  { name: "구인구직", key: "recuritPostsxc" },
 ];
 
 const HomePage = () => {
@@ -71,7 +71,7 @@ const HomePage = () => {
             ) : (
               <CommunityListComponent
                 key={activeBar}
-                activeStatus={activeBar}
+                activeType={activeBar}
                 type={getMenu()[activeBar].name}
               />
             )}

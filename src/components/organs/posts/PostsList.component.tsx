@@ -3,14 +3,15 @@ import ChatIcon from "@/components/icons/ChatIcon";
 import CommentIcon from "@/components/icons/CommentIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
 import { Posts } from "@prisma/client";
-import { getPostAPI, getPostsAPI } from "apis/posts";
+import { getPostsAPI, getPostTypeAPI } from "apis/posts";
+import Link from "next/link";
 import React from "react";
 import { useQuery } from "react-query";
 
 interface CommunityListComponentType {
   type: string;
   keyName?: string;
-  activeStatus?: number;
+  activeType?: number;
 }
 
 interface ResponsePostsType {
@@ -24,21 +25,21 @@ interface ResponsePostType {
 const CommunityListComponent = ({
   type,
   keyName,
-  activeStatus,
+  activeType,
 }: CommunityListComponentType) => {
   const { data: postsList, isLoading } = useQuery<ResponsePostsType>(
     "getPosts",
     getPostsAPI,
     {
-      enabled: !activeStatus,
+      enabled: !activeType,
     }
   );
 
   const { data: postList, isLoading: postLoading } = useQuery<ResponsePostType>(
     "getPost",
-    () => getPostAPI(Number(activeStatus)),
+    () => getPostTypeAPI(Number(activeType)),
     {
-      enabled: !!activeStatus,
+      enabled: !!activeType,
     }
   );
   return (
@@ -49,31 +50,39 @@ const CommunityListComponent = ({
       </div>
 
       <div className="flex flex-col divide-y last:divide-y-0">
-        {keyName && !isLoading && !activeStatus
+        {keyName && !isLoading && !activeType
           ? postsList?.posts[keyName]?.map((data: any, idx: number) => {
               return (
-                <div key={idx} className="flex justify-between py-2">
-                  <p>{data.title}</p>
-                  <div className="flex space-x-2">
-                    <UnLikedIcon />
-                    <span>2</span>
-                    <CommentIcon />
-                    <span>2</span>
-                  </div>
+                <div key={idx}>
+                  <Link href={`/posts/${data.id}`} key={idx}>
+                    <a href="#" className="flex justify-between py-2">
+                      <p>{data.title}</p>
+                      <div className="flex space-x-2">
+                        <UnLikedIcon />
+                        <span>2</span>
+                        <CommentIcon />
+                        <span>2</span>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
               );
             })
           : !postLoading &&
             postList?.post.map((data, idx) => {
               return (
-                <div key={idx} className="flex justify-between py-2">
-                  <p>{data.title}</p>
-                  <div className="flex space-x-2">
-                    <UnLikedIcon />
-                    <span>2</span>
-                    <CommentIcon />
-                    <span>2</span>
-                  </div>
+                <div key={idx}>
+                  <Link href={`/posts/${data.id}`}>
+                    <a href="#" className="flex justify-between py-2">
+                      <p>{data.title}</p>
+                      <div className="flex space-x-2">
+                        <UnLikedIcon />
+                        <span>2</span>
+                        <CommentIcon />
+                        <span>2</span>
+                      </div>
+                    </a>
+                  </Link>
                 </div>
               );
             })}
