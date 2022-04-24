@@ -89,7 +89,7 @@ const CommunityPstDetail = () => {
     !error &&
     !isLoading && (
       <>
-        <Layout title="커뮤니티" hasTabBar>
+        <Layout title="커뮤니티" canGoBack hasTabBar>
           <div className="px-4 py-10">
             <div className="mb-8">
               <div className="flex py-3 obrder-t border-b items-center space-x-3">

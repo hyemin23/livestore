@@ -1,27 +1,10 @@
-import { Product, User } from "@prisma/client";
 import { postLikeAPI } from "apis/products";
-import { cls } from "libs";
-import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 
-interface ProductWithUser extends Product {
-  user: User;
-}
-
-interface ItemDetailResponse {
-  ok: boolean;
-  product: ProductWithUser;
-  relatedProducts: Product[];
-  isLiked: boolean;
-}
-const ItemDetail: NextPage<ItemDetailResponse> = ({
-  product,
-  relatedProducts,
-  isLiked,
-}) => {
+const ItemDetail: React.FC = () => {
   const router = useRouter();
-  const { refetch } = useQuery(
+  const { data, refetch } = useQuery(
     `fav`,
     () => postLikeAPI(Number(router.query.id)),
     {
@@ -29,7 +12,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     }
   );
   const onFavClick = () => {
-    console.log("onFavClick");
     refetch();
   };
 
@@ -63,7 +45,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             <button className="flex-1 border border-primary rounded-md text-primary py-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary font-medium hover:bg-primary hover:text-white">
               Talk to seller
             </button>
-            <button
+            {/* <button
               onClick={() => onFavClick()}
               className={cls(
                 `flex items-center p-3  rounded-md justify-center hover:bg-gray-100 `,
@@ -87,7 +69,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

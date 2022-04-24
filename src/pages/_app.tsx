@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Hydrate state={pageProps.dehydratedState}>
         <Head>
           <meta charSet="utf-8" />
-          <title>찍구</title>
+          <title>뷰티용</title>
         </Head>
 
         <div className="w-full max-w-lg mx-auto font-myfont">

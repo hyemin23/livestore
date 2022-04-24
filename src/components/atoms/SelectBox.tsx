@@ -23,7 +23,6 @@ const SelectBox: React.FC<SelectBoxType> = ({
       {...props}
     >
       {options.map((name, idx) => {
-        console.log("idx", idx);
         return (
           <option key={idx} value={idx + 1}>
             {name}

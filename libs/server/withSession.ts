@@ -9,7 +9,7 @@ declare module "iron-session" {
 }
 
 const cookieOptions = {
-  cookieName: "zzi9session",
+  cookieName: "hairzzangSession",
   password: process.env.IRON_KEY!,
 };
 

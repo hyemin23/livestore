@@ -1,6 +1,7 @@
 import useUser from "libs/client/useUser";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import HomePage from "src/templates/HomePage";
 import IntroPage from "src/templates/IntroPage";
 
 const Home: NextPage = () => {
@@ -8,7 +9,8 @@ const Home: NextPage = () => {
   const { user, isLoading } = useUser();
 
   if (!isLoading && user) {
-    router.push("community");
+    return <HomePage />;
+    // router.push("community");
   }
   return <>{!isLoading && !user && <IntroPage />}</>;
 };
