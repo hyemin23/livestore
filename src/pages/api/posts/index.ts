@@ -16,7 +16,8 @@ async function handler(
       },
     };
 
-    const free = await client.posts.findMany({
+    const freePosts = await client.posts.findMany({
+      ...commonProps,
       where: {
         categories: {
           some: {
@@ -28,7 +29,8 @@ async function handler(
       },
     });
 
-    const job = await client.posts.findMany({
+    const jobPosts = await client.posts.findMany({
+      ...commonProps,
       where: {
         categories: {
           some: {
@@ -40,7 +42,8 @@ async function handler(
       },
     });
 
-    const recurit = await client.posts.findMany({
+    const recuritPosts = await client.posts.findMany({
+      ...commonProps,
       where: {
         categories: {
           some: {
@@ -55,9 +58,9 @@ async function handler(
     return res.json({
       ok: true,
       posts: {
-        free,
-        job,
-        recurit,
+        freePosts,
+        jobPosts,
+        recuritPosts,
       },
     });
   }

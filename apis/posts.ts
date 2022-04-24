@@ -8,3 +8,7 @@ export const uploadPostsAPI = (data: UploadPostsForm) => {
 export const getPostsAPI = () => {
   return axios.get("/api/posts").then((res) => res.data);
 };
+
+export const getPostAPI = (id: Number) => {
+  return axios.get(`/api/posts/${id}`).then((res) => res.data);
+};
