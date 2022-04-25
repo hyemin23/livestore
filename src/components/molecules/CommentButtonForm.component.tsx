@@ -1,4 +1,5 @@
-import { Comments } from "@prisma/client";
+import { Comments, PostsComments } from "@prisma/client";
+import { postCommentAPI } from "apis/posts";
 import { comCommentAPI } from "apis/products";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
@@ -16,7 +17,12 @@ interface ResponseComment {
   comment: Comments;
 }
 
-const CommentButtonFormComponents = () => {
+interface ResponsePostComment {
+  ok: boolean;
+  comment: PostsComments;
+}
+
+const CommentButtonFormComponents = ({ type }: any) => {
   const router = useRouter();
   const { id } = router.query;
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,6 +35,7 @@ const CommentButtonFormComponents = () => {
     formState: { errors },
   } = useForm<WriteForm>();
 
+  // 상품 댓글
   const mutation = useMutation<ResponseComment, AxiosError, WriteForm>(
     "comComment",
     (data: WriteForm) => comCommentAPI(Number(id), data),
@@ -44,11 +51,27 @@ const CommentButtonFormComponents = () => {
     }
   );
 
+  // 게시글 댓글
+  const postMutation = useMutation<ResponsePostComment, AxiosError, WriteForm>(
+    "postComment",
+    (data: WriteForm) => postCommentAPI(Number(id), data),
+    {
+      onMutate() {
+        setLoading(true);
+      },
+      onSuccess() {
+        reset();
+        setLoading(false);
+        queryClient.refetchQueries("getPosts");
+      },
+    }
+  );
+
   const onValid = (data: WriteForm) => {
     if (loading) {
       return;
     } else {
-      mutation.mutate(data);
+      type === "post" ? postMutation.mutate(data) : mutation.mutate(data);
     }
   };
 

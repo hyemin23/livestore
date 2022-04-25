@@ -66,7 +66,7 @@ const PostsDeatilComponent: React.FC = ({}) => {
             {/* 신고버튼 */}
 
             {/* 댓글 */}
-            <CommentWriteComponents comments={[]} />
+            <CommentWriteComponents type="post" comments={[]} />
 
             {/* 유사상품 */}
             <div>

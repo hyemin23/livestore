@@ -16,3 +16,7 @@ export const getPostTypeAPI = (type: Number) => {
 export const getPostSearchAPI = (id: Number) => {
   return axios.get(`/api/posts/${id}`).then((res) => res.data);
 };
+
+export const postCommentAPI = (id: number, data: { contents: string }) => {
+  return axios.post(`/api/posts/${id}/comment/`, data).then((res) => res.data);
+};

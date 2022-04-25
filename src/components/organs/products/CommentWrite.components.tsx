@@ -5,8 +5,12 @@ import { CommentsTypes } from "src/pages/community/[id]";
 
 interface CommentWriteComponentsType {
   comments: CommentsTypes[];
+  type: string;
 }
-const CommentWriteComponents = ({ comments }: CommentWriteComponentsType) => {
+const CommentWriteComponents = ({
+  comments,
+  type,
+}: CommentWriteComponentsType) => {
   return (
     <>
       {comments
@@ -14,7 +18,7 @@ const CommentWriteComponents = ({ comments }: CommentWriteComponentsType) => {
             <CommentContentsComponents comment={comment} key={index} />
           ))
         : null}
-      <CommentButtonFormComponents />
+      <CommentButtonFormComponents type={type} />
     </>
   );
 };
