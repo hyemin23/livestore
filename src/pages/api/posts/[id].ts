@@ -16,6 +16,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             nickname: true,
           },
         },
+        postsComments: {
+          select: {
+            id: true,
+            contents: true,
+            updatedAt: true,
+            user: {
+              select: {
+                nickname: true,
+                id: true,
+              },
+            },
+          },
+        },
+
+        _count: {
+          select: {
+            postsComments: true,
+            PostFav: true,
+          },
+        },
       },
     });
 

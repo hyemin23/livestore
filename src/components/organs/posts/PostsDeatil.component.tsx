@@ -11,7 +11,13 @@ import CommentWriteComponents from "../products/CommentWrite.components";
 
 interface ResponsePostsDeatilType {
   ok: boolean;
-  postItems: Posts & { user: User };
+  postItems: Posts & {
+    user: User;
+    _count: {
+      PostFav: number;
+      postsComments: number;
+    };
+  };
 }
 const PostsDeatilComponent: React.FC = ({}) => {
   const router = useRouter();
@@ -19,8 +25,13 @@ const PostsDeatilComponent: React.FC = ({}) => {
 
   const { data, isLoading } = useQuery<ResponsePostsDeatilType>(
     "getPostSearch",
-    () => getPostSearchAPI(Number(id))
+    () => getPostSearchAPI(Number(id)),
+    {
+      enabled: !!id,
+    }
   );
+
+  console.log("data", data);
 
   return !isLoading ? (
     <Layout hasTabBar title="자유게시판" canGoBack>
@@ -54,13 +65,17 @@ const PostsDeatilComponent: React.FC = ({}) => {
               >
                 <UnLikedIcon />
               </button>
-              <span className="select-none text-sm pt-1">test</span>
+              <span className="select-none text-sm pt-1">
+                {data?.postItems._count.PostFav}
+              </span>
 
               {/* 댓글 아이콘 */}
               <div className="p-2 flex text-secondary ">
                 <CommentIcon />
               </div>
-              <span className="select-none text-sm pt-1">test</span>
+              <span className="select-none text-sm pt-1">
+                {data?.postItems._count.postsComments}
+              </span>
             </div>
 
             {/* 신고버튼 */}

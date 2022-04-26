@@ -2,7 +2,6 @@ import CommentIcon from "@/components/icons/CommentIcon";
 import LikedIcon from "@/components/icons/LikedIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
 import Layout from "@/components/layout";
-import CommentWriteComponents from "@/components/organs/products/CommentWrite.components";
 import { Comments, Product, User } from "@prisma/client";
 import { getProductAPI, postLikeAPI } from "apis/products";
 import { AxiosError } from "axios";
@@ -37,12 +36,13 @@ const CommunityPstDetail = () => {
   const { id } = router.query;
 
   // id가 존재할 때 query 요청을 보냄
-  const { data, error, isLoading } = useQuery<
-    ResponseProductDetailType,
-    AxiosError
-  >("getProduct", () => getProductAPI(Number(id)), {
-    enabled: !!id,
-  });
+  const { data, error, isLoading } = useQuery<ResponseProductDetailType>(
+    "getProduct",
+    () => getProductAPI(Number(id)),
+    {
+      enabled: !!id,
+    }
+  );
 
   const likeMutation = useMutation<CommonResponseMutation, AxiosError, number>(
     "postLike",
@@ -138,9 +138,9 @@ const CommunityPstDetail = () => {
                 {/* 신고버튼 */}
 
                 {/* 댓글 */}
-                {data?.product.comments && (
+                {/* {data?.product.comments && (
                   <CommentWriteComponents comments={data.product.comments} />
-                )}
+                )} */}
 
                 {/* 유사상품 */}
                 <div>
