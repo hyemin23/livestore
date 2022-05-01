@@ -1,25 +1,26 @@
 import CommentIcon from "@/components/icons/CommentIcon";
 import UnLikedIcon from "@/components/icons/UnLikedIcon";
 import Layout from "@/components/layout";
-import { Posts, User } from "@prisma/client";
+import { Posts, PostsComments, User } from "@prisma/client";
 import { getPostSearchAPI } from "apis/posts";
 import { cls } from "libs";
 import { useRouter } from "next/router";
 import React from "react";
 import { useQuery } from "react-query";
-import CommentWriteComponents from "../products/CommentWrite.components";
+import CommentWriteComponents from "../CommentWrite.components";
 
 interface ResponsePostsDeatilType {
   ok: boolean;
   postItems: Posts & {
+    postsComments: PostsComments[];
     user: User;
     _count: {
-      PostFav: number;
+      postFav: number;
       postsComments: number;
     };
   };
 }
-const PostsDeatilComponent: React.FC = ({}) => {
+const PostsDeatilComponent = () => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -30,8 +31,6 @@ const PostsDeatilComponent: React.FC = ({}) => {
       enabled: !!id,
     }
   );
-
-  console.log("data", data);
 
   return !isLoading ? (
     <Layout hasTabBar title="자유게시판" canGoBack>
@@ -66,7 +65,7 @@ const PostsDeatilComponent: React.FC = ({}) => {
                 <UnLikedIcon />
               </button>
               <span className="select-none text-sm pt-1">
-                {data?.postItems._count.PostFav}
+                {data?.postItems._count.postFav}
               </span>
 
               {/* 댓글 아이콘 */}
@@ -81,13 +80,16 @@ const PostsDeatilComponent: React.FC = ({}) => {
             {/* 신고버튼 */}
 
             {/* 댓글 */}
-            <CommentWriteComponents type="post" comments={[]} />
+            <CommentWriteComponents
+              type="post"
+              postsComments={data?.postItems.postsComments}
+            />
 
             {/* 유사상품 */}
-            <div>
+            {/* <div>
               <h2 className="text-2xl font-bold text-gray-900">다음 게시물</h2>
               <div className="mt-6 grid grid-cols-2 gap-4">
-                {/* {data?.relatedProducts.map((product) => (
+                {data?.relatedProducts.map((product) => (
                   <div key={product.id}>
                     <div className="h-56 w-full mb-4 bg-slate-300" />
                     <h3 className="text-gray-700 -mb-1">{product.name}</h3>
@@ -95,16 +97,14 @@ const PostsDeatilComponent: React.FC = ({}) => {
                       {product.price}
                     </span>
                   </div>
-                ))} */}
+                ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
     </Layout>
-  ) : (
-    <>데이터가 없습니다.</>
-  );
+  ) : null;
 };
 
 export default PostsDeatilComponent;

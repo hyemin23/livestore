@@ -19,8 +19,8 @@ const Layout = ({ title, canGoBack, hasTabBar, children }: LayoutProps) => {
       {/* Header components 추가하기 */}
       <div
         className={cls(
-          !canGoBack ? "justify-center" : "",
-          "bg-white w-full max-w-xl text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0  flex items-center"
+          !canGoBack ? "justify-center border-none" : "",
+          "bg-white w-full max-w-xl text-lg px-10 font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center"
         )}
       >
         {canGoBack ? (

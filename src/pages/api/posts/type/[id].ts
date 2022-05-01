@@ -6,31 +6,25 @@ import { NextApiRequest, NextApiResponse } from "next";
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
 
+  let CateType: CategoryType;
+
   if (!!id) {
-    let cateName: CategoryType = "FREE";
-    switch (Number(id)) {
-      //   자유 게시판
-      case 1:
-        cateName = "FREE";
-        break;
-      // 매장 평가
-      case 2:
-        cateName = "SCORE";
-        break;
-      // 구인 구직
-      case 3:
-        cateName = "RECURIT";
-        break;
-      default:
-        cateName = "FREE";
-        break;
-    }
+    console.log("id : ", id);
+
     const post = await client.posts.findMany({
+      include: {
+        _count: {
+          select: {
+            postFav: true,
+            postsComments: true,
+          },
+        },
+      },
       where: {
         categories: {
           some: {
             category: {
-              name: cateName,
+              name: "FREE",
             },
           },
         },

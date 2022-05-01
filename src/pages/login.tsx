@@ -225,7 +225,6 @@ const Login: React.FC = (props) => {
 
 //   const response = await loadMyInfoAPI();
 
-// console.log("response : ", response);
 
 // if (response.data) {
 //   return {

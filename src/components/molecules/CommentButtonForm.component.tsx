@@ -63,6 +63,7 @@ const CommentButtonFormComponents = ({ type }: any) => {
         reset();
         setLoading(false);
         queryClient.refetchQueries("getPosts");
+        queryClient.refetchQueries("getPostSearch");
       },
     }
   );

@@ -23,7 +23,6 @@ function UploadComponent({ setLoading, folder, onUploadImage }: UploadProps) {
               path: folder,
             })
             .then((data: any) => {
-              console.log("profile upload data", data);
               onUploadImage(data);
             })
             .catch((error) => {

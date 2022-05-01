@@ -29,8 +29,6 @@ const Upload: NextPage = () => {
       alert(error.response?.data);
     },
     onSuccess: (data: UploadProductMutation) => {
-      console.log(data);
-
       if (data?.ok) {
         router.push(`/products/${data.product.id}`);
       }

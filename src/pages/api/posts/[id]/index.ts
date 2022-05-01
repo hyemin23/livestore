@@ -33,7 +33,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         _count: {
           select: {
             postsComments: true,
-            PostFav: true,
+            postFav: true,
           },
         },
       },

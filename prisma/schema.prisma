@@ -99,16 +99,18 @@ model Posts {
 
   categories    CategoriesOnPosts[]
   postsComments PostsComments[]
-  PostFav       PostFav[]
+  postFav       PostFav[]
 }
 
 // 카테고리
 model Category {
   id        Int                 @id @default(autoincrement())
-  name      CategoryType        @unique @default(FREE)
+  name      CategoryType        @default(FREE)
   posts     CategoriesOnPosts[]
   createdAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
+
+  @@unique([name])
 }
 
 model CategoriesOnPosts {
@@ -161,4 +163,6 @@ enum CategoryType {
   FREE
   SCORE
   RECURIT
+  MODEL
+  SHOP
 }

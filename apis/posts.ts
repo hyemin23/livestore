@@ -9,7 +9,7 @@ export const getPostsAPI = () => {
   return axios.get("/api/posts").then((res) => res.data);
 };
 
-export const getPostTypeAPI = (type: Number) => {
+export const getPostTypeAPI = (type: string) => {
   return axios.get(`/api/posts/type/${type}`).then((res) => res.data);
 };
 

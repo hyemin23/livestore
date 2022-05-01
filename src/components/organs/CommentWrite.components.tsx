@@ -1,20 +1,23 @@
 import CommentButtonFormComponents from "@/components/molecules/CommentButtonForm.component";
 import CommentContentsComponents from "@/components/molecules/CommentContents.components";
+import { PostsComments } from "@prisma/client";
 import React from "react";
 import { CommentsTypes } from "src/pages/community/[id]";
 
-interface CommentWriteComponentsType {
-  comments: CommentsTypes[];
+interface CommonType {
   type: string;
 }
-const CommentWriteComponents = ({
-  comments,
-  type,
-}: CommentWriteComponentsType) => {
+interface CommentWriteComponentsType extends CommonType {
+  comments: CommentsTypes[];
+}
+interface PostsCommentType extends CommonType {
+  postsComments?: PostsComments[];
+}
+const CommentWriteComponents = ({ postsComments, type }: PostsCommentType) => {
   return (
     <>
-      {comments
-        ? comments.map((comment: any, index: number) => (
+      {!!postsComments
+        ? postsComments.map((comment: any, index: number) => (
             <CommentContentsComponents comment={comment} key={index} />
           ))
         : null}

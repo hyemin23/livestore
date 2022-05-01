@@ -14,6 +14,14 @@ async function handler(
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        _count: {
+          select: {
+            postsComments: true,
+            postFav: true,
+          },
+        },
+      },
     };
 
     const freePosts = await client.posts.findMany({
